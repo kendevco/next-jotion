@@ -1,0 +1,1243 @@
+// middleware.ts
+import { clerkMiddleware } from ;
+import { NextFetchEvent, NextRequest, NextResponse } from ;
+
+const publicRoutes = [
+  ,
+  ,
+  ,
+];
+
+function isPublicRoute(path: string): boolean {
+  return publicRoutes.some(route => new RegExp(`^${route}$`).test(path));
+}
+
+export default function middleware(req: NextRequest, event: NextFetchEvent) {
+  if (isPublicRoute(req.nextUrl.pathname)) {
+    return NextResponse.next();
+  }
+
+  return clerkMiddleware()(req, event);
+}
+
+export const config = {
+  matcher: [],
+};
+
+
+// package.json
+{
+  "name": "notion-clone",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@blocknote/core": "^0.9.4",
+    "@blocknote/react": "^0.9.4",
+    "@clerk/clerk-react": "^4.26.3",
+    "@clerk/clerk-sdk-node": "^5.0.11",
+    "@clerk/nextjs": "^5.1.5",
+    "@edgestore/react": "^0.1.6",
+    "@edgestore/server": "^0.1.6",
+    "@radix-ui/react-alert-dialog": "^1.0.5",
+    "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-popover": "^1.0.7",
+    "@radix-ui/react-scroll-area": "^1.0.5",
+    "@radix-ui/react-slot": "^1.0.2",
+    "axios": "^1.7.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "cmdk": "^0.2.0",
+    "emoji-picker-react": "^4.5.2",
+    "lucide-react": "^0.284.0",
+    "next": "13.5.4",
+    "next-themes": "^0.2.1",
+    "react": "^18",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
+    "react-textarea-autosize": "^8.5.3",
+    "sonner": "^1.0.3",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animate": "^1.0.7",
+    "usehooks-ts": "^2.9.1",
+    "zod": "^3.22.4",
+    "zustand": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/multer": "^1.4.11",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-beautiful-dnd": "^13.1.8",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10",
+    "convex": "^1.12.1",
+    "eslint": "^8",
+    "eslint-config-next": "13.5.4",
+    "postcss": "^8",
+    "tailwindcss": "^3",
+    "typescript": "^5"
+  }
+}
+
+
+// app\layout.tsx
+import { Toaster } from ;
+import { Inter } from 
+import type { Metadata } from 
+
+import { ThemeProvider } from 
+import { ConvexClientProvider } from 
+import { ModalProvider } from ;
+import { EdgeStoreProvider } from ;
+import ClientWrapper from ;
+
+import 
+
+const inter = Inter({ subsets: [] })
+
+export const metadata: Metadata = {
+  title: ,
+  description: ,
+  icons: {
+    icon: [
+      {
+        media: ,
+        url: ,
+        href: ,
+      },
+      {
+        media: ,
+        url: ,
+        href: ,
+      }
+    ]
+  }
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+
+  return (
+    <html lang= suppressHydrationWarning>
+      <body className={inter.className}>
+        <ConvexClientProvider>
+        <ClientWrapper>
+          <EdgeStoreProvider>
+            <ThemeProvider
+              attribute=
+              defaultTheme=
+              enableSystem
+              disableTransitionOnChange
+              storageKey=
+            >
+              <Toaster position= />
+              <ModalProvider />
+              {children}
+            </ThemeProvider>
+          </EdgeStoreProvider>
+          </ClientWrapper>
+        </ConvexClientProvider>
+      </body>
+    </html>
+  )
+}
+
+
+// app\(main)\(routes)\documents\page.tsx
+
+
+;
+
+import { useUser } from ;
+import { useMutation } from ;
+import { api } from ;
+import { Button } from ;
+import { PlusCircle } from ;
+import { useRouter } from ;
+import { toast } from ;
+import { useEffect, useState } from ;
+import { Id } from ;
+
+interface Workspace {
+  _id: Id<>;
+  _creationTime: number;
+  userId: string;
+  authorizedUsers: { userId: string; permission: string; }[];
+}
+
+const DocumentsPage = () => {
+  const router = useRouter();
+  const { user } = useUser();
+  const createDocument = useMutation(api.documents.create);
+  const getOrCreateWorkspace = useMutation(api.workspaces.getOrCreateUserWorkspace);
+  const [workspace, setWorkspace] = useState<Workspace | null>(null);
+
+  useEffect(() => {
+    const fetchWorkspace = async () => {
+      const ws = await getOrCreateWorkspace();
+      setWorkspace(ws);
+    };
+    fetchWorkspace();
+  }, [getOrCreateWorkspace]);
+
+  const onCreate = () => {
+    if (!workspace) return; 
+    const promise = createDocument({ title: , workspaceId: workspace._id })
+      .then((documentId) => router.push(`/documents/${documentId}`));
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error: ,
+    });
+  };
+
+  return (
+    <div className=>
+      <h2 className=>Welcome to {user?.firstName}&apos;s Jotion</h2>
+      <Button onClick={onCreate}>
+        <PlusCircle className= />
+        Create a note
+      </Button>
+    </div>
+  );
+};
+
+export default DocumentsPage;
+
+// app\api\edgestore\[...edgestore]\route.ts
+
+import { NextApiRequest, NextApiResponse } from ;
+import { initEdgeStore } from ;
+import { createEdgeStoreNextHandler } from ;
+ 
+const es = initEdgeStore.create();
+ 
+
+const edgeStoreRouter = es.router({
+  publicFiles: es.fileBucket()
+    .beforeDelete(() => {
+      return true;
+    }),
+});
+ 
+const handler = createEdgeStoreNextHandler({
+  router: edgeStoreRouter,
+});
+ 
+export { handler as GET, handler as POST };
+export { edgeStoreRouter }; 
+ 
+
+export type EdgeStoreRouter = typeof edgeStoreRouter;
+
+// app\api\syncuserprofile\route.ts
+import { NextApiRequest, NextApiResponse } from ;
+import { getAuth } from ;
+import { clerkClient } from ;
+import { api } from ;
+import { fetchMutation } from ;
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    return res.status(401).json({ error:  });
+  }
+
+  const user = await clerkClient.users.getUser(userId);
+
+  const profileData = {
+    avatar: user.imageUrl || ,
+    displayName: user.fullName || , 
+    email: user.emailAddresses[0].emailAddress,
+  };
+
+  try {
+    await fetchMutation(api.userprofile.upsertUserProfile, {
+      clerkUserId: user.id,
+      profileData,
+    });
+    res.status(200).json({ message:  });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+
+// app\api\userProfiles\route.ts
+
+import { NextApiRequest, NextApiResponse } from ;
+import { api } from ; 
+
+import { fetchQuery, fetchMutation } from ;
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  switch (req.method) {
+    case :
+      try {
+        const userProfiles = await fetchQuery(api.userprofile.getAllUserProfiles);
+        res.status(200).json(userProfiles);
+      } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message :  });
+      }
+      break;
+    case :
+      try {
+        const { clerkUserId, profileData } = req.body;
+        const newUserProfile = await fetchMutation(api.userprofile.upsertUserProfile, { clerkUserId, profileData });
+        res.status(201).json(newUserProfile);
+      } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message :  });
+      }
+      break;
+    default:
+      res.status(405).json({ error:  });
+      break;
+  }
+}
+
+// app\api\workspaces\route.ts
+
+import { NextApiRequest, NextApiResponse } from ;
+import { api } from ; 
+import { fetchQuery, fetchMutation } from ;
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  switch (req.method) {
+    case :
+      try {
+        const workspaces = await fetchQuery(api.workspaces.getAll);
+        res.status(200).json(workspaces);
+      } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message :  });
+      }
+      break;
+    case :
+      try {
+        const { name, ownerId } = req.body;
+        const newWorkspace = await fetchMutation(api.workspaces.create, { name, ownerId });
+        res.status(201).json(newWorkspace);
+      } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message :  });
+      }
+      break;
+    case :
+      try {
+        const { workspaceId, userId, permission } = req.body;
+        const updatedMembers = await fetchMutation(api.workspaces.updateWorkspacePermissions, { workspaceId, userId, permission });
+        res.status(200).json({ message: , updatedMembers });
+      } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message :  });
+      }
+      break;
+    default:
+      res.status(405).json({ error:  });
+      break;
+  }
+}
+
+// components\clientwrapper.tsx
+
+
+;
+
+import { ReactNode } from ;
+import { useSyncUserProfile } from ;
+
+interface ClientWrapperProps {
+  children: ReactNode;
+}
+
+const ClientWrapper = ({ children }: ClientWrapperProps) => {
+  useSyncUserProfile();
+  return <>{children}</>;
+};
+
+export default ClientWrapper;
+
+// components\document-list.tsx
+
+;
+
+import { DragDropContext, Droppable, Draggable } from ;
+import { useParams, useRouter } from ;
+import { useState } from ;
+import { useQuery, useMutation } from ;
+import { api } from ;
+import Item from ;
+import { FileIcon } from ;
+import { Id } from ;
+
+interface Document {
+  _id: Id<>;
+  title: string;
+  icon?: string;
+  parentDocument?: Id<>;
+}
+
+export const DocumentList = ({ parentDocumentId, level = 0 }: { parentDocumentId?: Id<>; level?: number }) => {
+  const params = useParams();
+  const router = useRouter();
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const updateDocument = useMutation(api.documents.update);
+  const documents = useQuery(api.documents.getSidebar, { parentDocument: parentDocumentId });
+
+  const onExpand = (documentId: string) => {
+    setExpanded((prevExpanded) => ({
+      ...prevExpanded,
+      [documentId]: !prevExpanded[documentId],
+    }));
+  };
+
+  const onRedirect = (documentId: string) => {
+    router.push(`/documents/${documentId}`);
+  };
+
+  const onDragEnd = async (result: any) => {
+    if (!result.destination) return;
+    const { draggableId, destination } = result;
+    await updateDocument({
+      id: draggableId as Id<>,
+      parentDocument: destination.droppableId ? (destination.droppableId as Id<>) : undefined,
+    });
+  };
+
+  if (documents === undefined) {
+    return (
+      <>
+        <Item.Skeleton level={level} />
+        {level === 0 && (
+          <>
+            <Item.Skeleton level={level} />
+            <Item.Skeleton level={level} />
+          </>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId={parentDocumentId || }>
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            {documents.sort((a, b) => a.title.localeCompare(b.title)).map((document: Document, index: number) => (
+              <Draggable key={document._id} draggableId={document._id} index={index}>
+                {(provided) => (
+                  <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                    <Item
+                      id={document._id}
+                      onClick={() => onRedirect(document._id)}
+                      label={document.title}
+                      icon={FileIcon}
+                      documentIcon={document.icon}
+                      active={params.documentId === document._id}
+                      level={level}
+                      onExpand={() => onExpand(document._id)}
+                      expanded={expanded[document._id]}
+                    />
+                    {expanded[document._id] && (
+                      <DocumentList
+                        parentDocumentId={document._id}
+                        level={level + 1}
+                      />
+                    )}
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
+  );
+};
+
+export default DocumentList;
+
+// convex\documents.ts
+
+import { v } from ;
+import { mutation, query } from ;
+import { Doc, Id } from ;
+
+export const archive = mutation({
+  args: { id: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error();
+    }
+
+    const userId = identity.subject;
+
+    const existingDocument = await ctx.db.get(args.id);
+
+    if (!existingDocument) {
+      throw new Error();
+    }
+
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+
+    const recursiveArchive = async (documentId: Id<>) => {
+      const children = await ctx.db
+        .query()
+        .withIndex(, (q) => (
+          q
+            .eq(, userId)
+            .eq(, documentId)
+        ))
+        .collect();
+
+      for (const child of children) {
+        await ctx.db.patch(child._id, {
+          isArchived: true,
+        });
+
+        await recursiveArchive(child._id);
+      }
+    }
+
+    const document = await ctx.db.patch(args.id, {
+      isArchived: true,
+    });
+
+    await recursiveArchive(args.id);
+
+    return document;
+  }
+})
+
+export const getSidebar = query({
+  args: {
+    parentDocument: v.optional(v.id())
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error();
+    }
+
+    const userId = identity.subject;
+
+    const documents = await ctx.db
+      .query()
+      .withIndex(, (q) =>
+        q
+          .eq(, userId)
+          .eq(, args.parentDocument)
+      )
+      .filter((q) =>
+        q.eq(q.field(), false)
+      )
+      .order()
+      .collect();
+
+    return documents;
+  },
+});
+
+export const create = mutation({
+  args: {
+    title: v.string(),
+    parentDocument: v.optional(v.id()),
+    workspaceId: v.optional(v.id()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+
+    const userId = identity.subject;
+
+    const document = await ctx.db.insert(, {
+      title: args.title,
+      parentDocument: args.parentDocument,
+      userId,
+      workspaceId: args.workspaceId,
+      isArchived: false,
+      isPublished: false,
+    });
+
+    return document;
+  }
+});
+
+export const getTrash = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error();
+    }
+
+    const userId = identity.subject;
+
+    const documents = await ctx.db
+      .query()
+      .withIndex(, (q) => q.eq(, userId))
+      .filter((q) =>
+        q.eq(q.field(), true),
+      )
+      .order()
+      .collect();
+
+    return documents;
+  }
+});
+
+export const restore = mutation({
+  args: { id: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+
+    const userId = identity.subject;
+
+    const existingDocument = await ctx.db.get(args.id);
+
+    if (!existingDocument) {
+      throw new Error();
+    }
+
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+
+    const recursiveRestore = async (documentId: Id<>) => {
+      const children = await ctx.db
+        .query()
+        .withIndex(, (q) => (
+          q
+            .eq(, userId)
+            .eq(, documentId)
+        ))
+        .collect();
+
+      for (const child of children) {
+        await ctx.db.patch(child._id, {
+          isArchived: false,
+        });
+
+        await recursiveRestore(child._id);
+      }
+    }
+
+    const options: Partial<Doc<>> = {
+      isArchived: false,
+    };
+
+    if (existingDocument.parentDocument) {
+      const parent = await ctx.db.get(existingDocument.parentDocument);
+      if (parent?.isArchived) {
+        options.parentDocument = undefined;
+      }
+    }
+
+    const document = await ctx.db.patch(args.id, options);
+
+    await recursiveRestore(args.id);
+
+    return document;
+  }
+});
+
+export const remove = mutation({
+  args: { id: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error();
+    }
+
+    const userId = identity.subject;
+
+    const existingDocument = await ctx.db.get(args.id);
+
+    if (!existingDocument) {
+      throw new Error();
+    }
+
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+
+    const document = await ctx.db.delete(args.id);
+
+    return document;
+  }
+});
+
+export const getSearch = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error();
+    }
+
+    const userId = identity.subject;
+
+    const documents = await ctx.db
+      .query()
+      .withIndex(, (q) => q.eq(, userId))
+      .filter((q) =>
+        q.eq(q.field(), false),
+      )
+      .order()
+      .collect()
+
+    return documents;
+  }
+});
+
+export const getById = query({
+  args: { documentId: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    const document = await ctx.db.get(args.documentId);
+
+    if (!document) {
+      throw new Error();
+    }
+
+    if (document.isPublished && !document.isArchived) {
+      return document;
+    }
+
+    if (!identity) {
+      throw new Error();
+    }
+
+    const userId = identity.subject;
+
+    if (document.userId !== userId) {
+      throw new Error();
+    }
+
+    return document;
+  }
+});
+
+export const update = mutation({
+  args: {
+    id: v.id(),
+    title: v.optional(v.string()),
+    content: v.optional(v.string()),
+    coverImage: v.optional(v.string()),
+    icon: v.optional(v.string()),
+    isPublished: v.optional(v.boolean()),
+    parentDocument: v.optional(v.id()) 
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const { id, ...rest } = args;
+    const existingDocument = await ctx.db.get(args.id);
+    if (!existingDocument) {
+      throw new Error();
+    }
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+    const document = await ctx.db.patch(args.id, {
+      ...rest,
+    });
+    return document;
+  },
+});
+
+export const removeIcon = mutation({
+  args: { id: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const existingDocument = await ctx.db.get(args.id) as Doc<>;
+    if (!existingDocument) {
+      throw new Error();
+    }
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+    const document = await ctx.db.patch(args.id, {
+      icon: undefined,
+    });
+    return document;
+  },
+});
+
+export const removeCoverImage = mutation({
+  args: { id: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error();
+    }
+
+    const userId = identity.subject;
+
+    const existingDocument = await ctx.db.get(args.id);
+
+    if (!existingDocument) {
+      throw new Error();
+    }
+
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+
+    const document = await ctx.db.patch(args.id, {
+      coverImage: undefined,
+    });
+
+    return document;
+  }
+});
+
+// convex\schema.ts
+
+import { defineSchema, defineTable } from ;
+import { v } from ;
+
+export default defineSchema({
+  documents: defineTable({
+    title: v.string(),
+    userId: v.string(),
+    workspaceId: v.optional(v.id()),
+    sharedWith: v.optional(v.array(
+      v.object({
+        userId: v.string(),
+        permission: v.string(),
+      })
+    )),
+    isArchived: v.boolean(),
+    parentDocument: v.optional(v.id()),
+    content: v.optional(v.string()),
+    coverImage: v.optional(v.string()),
+    icon: v.optional(v.string()),
+    isPublished: v.boolean(),
+  })
+  .index(, [])
+  .index(, [])
+  .index(, [, ]),
+  workspaces: defineTable({
+    name: v.string(),
+    ownerId: v.optional(v.id()),
+    userId: v.string(),
+    icon: v.optional(v.string()), 
+    authorizedUsers: v.array(
+      v.object({
+        userId: v.string(),
+        permission: v.string(),
+      })
+    ),
+  }).index(, []),
+  userProfile: defineTable({
+    userId: v.string(),
+    avatar: v.optional(v.string()), 
+    displayName: v.optional(v.string()),
+    email: v.optional(v.string()),
+  }),
+  memberships: defineTable({
+    workspaceId: v.id(),
+    userId: v.id(),
+    role: v.union(
+      v.literal(),
+      v.literal(),
+      v.literal(),
+      v.literal()
+    ),
+  }).index(, []),
+  publicFiles: defineTable({
+    file: v.bytes(),
+    filename: v.string(),
+  }).index(, []),
+});
+
+// convex\updateWorkspaces.ts
+
+import { mutation } from ;
+import { Id } from ;
+
+export const updateWorkspaces = mutation({
+  handler: async (ctx) => {
+    const workspaces = await ctx.db.query().collect();
+    for (const workspace of workspaces) {
+      const updates: Partial<{ ownerId: Id<> }> = {};
+      if (!workspace.ownerId) {
+        updates.ownerId = workspace.userId as Id<>; 
+      }
+      if (Object.keys(updates).length > 0) {
+        await ctx.db.patch(workspace._id, updates);
+      }
+    }
+  },
+});
+
+// convex\userprofile.ts
+import { v } from ;
+import { mutation, query } from ;
+import { Id } from ;
+
+export const upsertUserProfile = mutation({
+  args: {
+    clerkUserId: v.string(),
+    profileData: v.object({
+      avatar: v.optional(v.string()), 
+      displayName: v.optional(v.string()),
+      email: v.optional(v.string()),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const existingProfiles = await ctx.db
+      .query()
+      .filter((q) => q.eq(q.field(), args.clerkUserId))
+      .take(1);
+    const existingProfile = existingProfiles.length > 0 ? existingProfiles[0] : null;
+    if (existingProfile) {
+      const updatedProfile = { ...existingProfile, ...args.profileData };
+      return await ctx.db.replace(existingProfile._id, updatedProfile);
+    } else {
+      return await ctx.db.insert(, {
+        userId: args.clerkUserId,
+        ...args.profileData,
+      });
+    }
+  },
+});
+
+export const getUserProfile = query({
+  args: {
+    clerkUserId: v.string(),
+  },
+  async handler({ db }, { clerkUserId }) {
+    const existingProfiles = await db
+      .query()
+      .filter((q) => q.eq(q.field(), clerkUserId))
+      .take(1);
+    return existingProfiles.length > 0 ? existingProfiles[0] : null;
+  },
+});
+
+export const getAllUserProfiles = query(async ({ db }) => {
+  return await db.query().collect();
+});
+
+// convex\workspaces.ts
+
+
+import { v } from ;
+import { mutation, query } from ;
+import { Id } from ;
+
+type UserId = Id<>;
+
+export const getAll = query({
+  handler: async (ctx) => {
+    const workspaces = await ctx.db.query().collect();
+    return workspaces;
+  },
+});
+
+export const create = mutation({
+  args: {
+    name: v.string(),
+    ownerId: v.id(),
+    icon: v.optional(v.string()), 
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject as UserId;
+    const newWorkspace = await ctx.db.insert(, {
+      name: args.name,
+      ownerId: args.ownerId,
+      userId: args.ownerId,
+      icon: args.icon || , 
+      authorizedUsers: [{ userId: args.ownerId, permission:  }],
+    });
+    return newWorkspace;
+  }
+});
+
+export const updateWorkspacePermissions = mutation({
+  args: {
+    workspaceId: v.id(),
+    userId: v.id(),
+    permission: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const { workspaceId, userId, permission } = args;
+    
+    const workspace = await ctx.db.get(workspaceId);
+    if (!workspace) {
+      throw new Error();
+    }
+    
+    const updatedAuthorizedUsers = workspace.authorizedUsers.map((user) => {
+      if (user.userId === userId) {
+        return { ...user, permission };
+      }
+      return user;
+    });
+    
+    await ctx.db.replace(workspaceId, {
+      ...workspace,
+      authorizedUsers: updatedAuthorizedUsers,
+    });
+    return updatedAuthorizedUsers;
+  },
+});
+
+export const getWorkspace = query({
+  args: {
+    workspaceId: v.id(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.workspaceId);
+  },
+});
+
+export const getOrCreateUserWorkspace = mutation({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject as UserId;
+    let workspace = await ctx.db
+      .query()
+      .withIndex(, (q) => q.eq(, userId))
+      .first();
+    
+    if (!workspace) {
+      const workspaceId = await ctx.db.insert(, {
+        name: ,
+        ownerId: userId,
+        userId,
+        icon: , 
+        authorizedUsers: [{ userId, permission:  }],
+      });
+      workspace = await ctx.db.get(workspaceId); 
+    }
+    if (!workspace) {
+      throw new Error();
+    }
+    return workspace;
+  },
+});
+
+// convex\_generated\api.d.ts
+
+
+
+import type {
+  ApiFromModules,
+  FilterApi,
+  FunctionReference,
+} from ;
+import type * as documents from ;
+import type * as permissions from ;
+import type * as updateWorkspaces from ;
+import type * as userprofile from ;
+import type * as workspaces from ;
+
+
+declare const fullApi: ApiFromModules<{
+  documents: typeof documents;
+  permissions: typeof permissions;
+  updateWorkspaces: typeof updateWorkspaces;
+  userprofile: typeof userprofile;
+  workspaces: typeof workspaces;
+}>;
+export declare const api: FilterApi<
+  typeof fullApi,
+  FunctionReference<any, >
+>;
+export declare const internal: FilterApi<
+  typeof fullApi,
+  FunctionReference<any, >
+>;
+
+
+// convex\_generated\api.js
+
+
+
+import { anyApi } from ;
+
+
+export const api = anyApi;
+export const internal = anyApi;
+
+
+// convex\_generated\dataModel.d.ts
+
+
+
+import type {
+  DataModelFromSchemaDefinition,
+  DocumentByName,
+  TableNamesInDataModel,
+  SystemTableNames,
+} from ;
+import type { GenericId } from ;
+import schema from ;
+
+
+export type TableNames = TableNamesInDataModel<DataModel>;
+
+
+export type Doc<TableName extends TableNames> = DocumentByName<
+  DataModel,
+  TableName
+>;
+
+
+export type Id<TableName extends TableNames | SystemTableNames> =
+  GenericId<TableName>;
+
+
+export type DataModel = DataModelFromSchemaDefinition<typeof schema>;
+
+
+// convex\_generated\server.d.ts
+
+
+
+import {
+  ActionBuilder,
+  HttpActionBuilder,
+  MutationBuilder,
+  QueryBuilder,
+  GenericActionCtx,
+  GenericMutationCtx,
+  GenericQueryCtx,
+  GenericDatabaseReader,
+  GenericDatabaseWriter,
+} from ;
+import type { DataModel } from ;
+
+
+export declare const query: QueryBuilder<DataModel, >;
+
+
+export declare const internalQuery: QueryBuilder<DataModel, >;
+
+
+export declare const mutation: MutationBuilder<DataModel, >;
+
+
+export declare const internalMutation: MutationBuilder<DataModel, >;
+
+
+export declare const action: ActionBuilder<DataModel, >;
+
+
+export declare const internalAction: ActionBuilder<DataModel, >;
+
+
+export declare const httpAction: HttpActionBuilder;
+
+
+export type QueryCtx = GenericQueryCtx<DataModel>;
+
+
+export type MutationCtx = GenericMutationCtx<DataModel>;
+
+
+export type ActionCtx = GenericActionCtx<DataModel>;
+
+
+export type DatabaseReader = GenericDatabaseReader<DataModel>;
+
+
+export type DatabaseWriter = GenericDatabaseWriter<DataModel>;
+
+
+// convex\_generated\server.js
+
+
+
+import {
+  actionGeneric,
+  httpActionGeneric,
+  queryGeneric,
+  mutationGeneric,
+  internalActionGeneric,
+  internalMutationGeneric,
+  internalQueryGeneric,
+} from ;
+
+
+export const query = queryGeneric;
+
+
+export const internalQuery = internalQueryGeneric;
+
+
+export const mutation = mutationGeneric;
+
+
+export const internalMutation = internalMutationGeneric;
+
+
+export const action = actionGeneric;
+
+
+export const internalAction = internalActionGeneric;
+
+
+export const httpAction = httpActionGeneric;
+
+
+// hooks\use-sync-user-profile.ts
+;
+
+import { useAuth } from ;
+import { useEffect } from ;
+
+export const useSyncUserProfile = () => {
+  const { userId } = useAuth();
+
+  useEffect(() => {
+    if (userId) {
+      fetch(, { method:  });
+    }
+  }, [userId]);
+};
+

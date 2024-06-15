@@ -1,3 +1,4 @@
+// app/(main)/_components/workspace-list.tsx
 "use client";
 
 import { useParams, useRouter } from "next/navigation";

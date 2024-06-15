@@ -1,5 +1,5 @@
+// convex\documents.ts
 import { v } from "convex/values";
-
 import { mutation, query } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
 
@@ -47,7 +47,7 @@ export const archive = mutation({
       isArchived: true,
     });
 
-    recursiveArchive(args.id);
+    await recursiveArchive(args.id);
 
     return document;
   }
@@ -86,11 +86,11 @@ export const getSidebar = query({
 export const create = mutation({
   args: {
     title: v.string(),
-    parentDocument: v.optional(v.id("documents"))
+    parentDocument: v.optional(v.id("documents")),
+    workspaceId: v.optional(v.id("workspaces")),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-
     if (!identity) {
       throw new Error("Not authenticated");
     }
@@ -101,6 +101,7 @@ export const create = mutation({
       title: args.title,
       parentDocument: args.parentDocument,
       userId,
+      workspaceId: args.workspaceId,
       isArchived: false,
       isPublished: false,
     });
@@ -136,7 +137,6 @@ export const restore = mutation({
   args: { id: v.id("documents") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-
     if (!identity) {
       throw new Error("Not authenticated");
     }
@@ -185,7 +185,7 @@ export const restore = mutation({
 
     const document = await ctx.db.patch(args.id, options);
 
-    recursiveRestore(args.id);
+    await recursiveRestore(args.id);
 
     return document;
   }
@@ -272,69 +272,55 @@ export const getById = query({
 
 export const update = mutation({
   args: {
-    id: v.id("documents"),
+    id: v.id('documents'),
     title: v.optional(v.string()),
     content: v.optional(v.string()),
     coverImage: v.optional(v.string()),
     icon: v.optional(v.string()),
-    isPublished: v.optional(v.boolean())
+    isPublished: v.optional(v.boolean()),
+    parentDocument: v.optional(v.id('documents')) // Ensure tableName is provided
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-
     if (!identity) {
-      throw new Error("Unauthenticated");
+      throw new Error('Unauthorized');
     }
-
     const userId = identity.subject;
-
     const { id, ...rest } = args;
-
     const existingDocument = await ctx.db.get(args.id);
-
     if (!existingDocument) {
-      throw new Error("Not found");
+      throw new Error('Document not found');
     }
-
     if (existingDocument.userId !== userId) {
-      throw new Error("Unauthorized");
+      throw new Error('Permission denied');
     }
-
     const document = await ctx.db.patch(args.id, {
       ...rest,
     });
-
     return document;
   },
 });
 
 export const removeIcon = mutation({
-  args: { id: v.id("documents") },
+  args: { id: v.id('documents') },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-
     if (!identity) {
-      throw new Error("Unauthenticated");
+      throw new Error('Unauthorized');
     }
-
     const userId = identity.subject;
-
-    const existingDocument = await ctx.db.get(args.id);
-
+    const existingDocument = await ctx.db.get(args.id) as Doc<'documents'>;
     if (!existingDocument) {
-      throw new Error("Not found");
+      throw new Error('Document not found');
     }
-
     if (existingDocument.userId !== userId) {
-      throw new Error("Unauthorized");
+      throw new Error('Permission denied');
     }
-
     const document = await ctx.db.patch(args.id, {
-      icon: undefined
+      icon: undefined,
     });
-
     return document;
-  }
+  },
 });
 
 export const removeCoverImage = mutation({

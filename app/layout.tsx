@@ -1,5 +1,5 @@
 import { Toaster } from "sonner";
-import { Inter } from 'next/font/google'
+import { DM_Sans } from 'next/font/google'
 import type { Metadata } from 'next'
 
 import { ThemeProvider } from '@/components/providers/theme-provider'
@@ -9,7 +9,7 @@ import { EdgeStoreProvider } from "@/lib/edgestore";
 
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const font = DM_Sans({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Jotion',
@@ -35,9 +35,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={font.className}>
         <ConvexClientProvider>
           <EdgeStoreProvider>
             <ThemeProvider

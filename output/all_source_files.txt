@@ -1,0 +1,4994 @@
+// .eslintrc.json
+{
+  "extends": "next/core-web-vitals"
+}
+// components.json
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "default",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.ts",
+    "css": "app/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils"
+  }
+}
+// middleware.ts
+import { clerkMiddleware } from ;
+import { NextFetchEvent, NextRequest, NextResponse } from ;
+const publicRoutes = [
+  ,
+  ,
+  ,
+];
+function isPublicRoute(path: string): boolean {
+  return publicRoutes.some(route => new RegExp(`^${route}$`).test(path));
+}
+export default function middleware(req: NextRequest, event: NextFetchEvent) {
+  if (isPublicRoute(req.nextUrl.pathname)) {
+    return NextResponse.next();
+  }
+  return clerkMiddleware()(req, event);
+}
+export const config = {
+  matcher: [],
+};
+// next-env.d.ts
+
+// next.config.js
+const nextConfig = {
+  images: {
+    domains: [
+      
+    ]
+  }
+}
+module.exports = nextConfig
+// package.json
+{
+  "name": "notion-clone",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@blocknote/core": "^0.9.4",
+    "@blocknote/react": "^0.9.4",
+    "@clerk/clerk-react": "^4.26.3",
+    "@clerk/clerk-sdk-node": "^5.0.11",
+    "@clerk/nextjs": "^5.1.5",
+    "@edgestore/react": "^0.1.6",
+    "@edgestore/server": "^0.1.6",
+    "@radix-ui/react-alert-dialog": "^1.0.5",
+    "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-popover": "^1.0.7",
+    "@radix-ui/react-scroll-area": "^1.0.5",
+    "@radix-ui/react-slot": "^1.0.2",
+    "axios": "^1.7.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "cmdk": "^0.2.0",
+    "emoji-picker-react": "^4.5.2",
+    "lucide-react": "^0.284.0",
+    "next": "13.5.4",
+    "next-themes": "^0.2.1",
+    "react": "^18",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
+    "react-textarea-autosize": "^8.5.3",
+    "sonner": "^1.0.3",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animate": "^1.0.7",
+    "usehooks-ts": "^2.9.1",
+    "zod": "^3.22.4",
+    "zustand": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/multer": "^1.4.11",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-beautiful-dnd": "^13.1.8",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10",
+    "convex": "^1.12.1",
+    "eslint": "^8",
+    "eslint-config-next": "13.5.4",
+    "postcss": "^8",
+    "tailwindcss": "^3",
+    "typescript": "^5"
+  }
+}
+// postcss.config.js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+// README.md
+# Fullstack Notion Clone: Next.js 13, React, Convex, Tailwind | Full Course 2023
+![Copy of Copy of Copy of Fullstack Twitter Clone (6)](https://github.com/AntonioErdeljac/notion-clone-tutorial/assets/23248726/66bcfca3-93bf-4aa4-950d-f98c020e1156)
+This is a repository for Fullstack Notion Clone: Next.js 13, React, Convex, Tailwind | Full Course 2023
+[VIDEO TUTORIAL](https://www.youtube.com/watch?v=ZbX4Ok9YX94)
+Key Features:
+- Real-time database  🔗 
+- Notion-style editor 📝 
+- Light and Dark mode 🌓
+- Infinite children documents 🌲
+- Trash can & soft delete 🗑️
+- Authentication 🔐 
+- File upload
+- File deletion
+- File replacement
+- Icons for each document (changes in real-time) 🌠
+- Expandable sidebar ➡️🔀⬅️
+- Full mobile responsiveness 📱
+- Publish your note to the web 🌐
+- Fully collapsable sidebar ↕️
+- Landing page 🛬
+- Cover image of each document 🖼️
+- Recover deleted files 🔄📄
+### Prerequisites
+**Node version 18.x.x**
+### Cloning the repository
+```shell
+git clone https://github.com/AntonioErdeljac/notion-clone-tutorial.git
+```
+### Install packages
+```shell
+npm i
+```
+### Setup .env file
+```js
+# Deployment used by `npx convex dev`
+CONVEX_DEPLOYMENT=
+NEXT_PUBLIC_CONVEX_URL=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+EDGE_STORE_ACCESS_KEY=
+EDGE_STORE_SECRET_KEY=
+```
+### Setup Convex
+```shell
+npx convex dev
+```
+### Start the app
+```shell
+npm run dev
+```
+// tailwind.config.ts
+module.exports = {
+  darkMode: [],
+  content: [
+    ,
+    ,
+    ,
+    ,
+	],
+  theme: {
+    container: {
+      center: true,
+      padding: ,
+      screens: {
+        : ,
+      },
+    },
+    extend: {
+      colors: {
+        border: ,
+        input: ,
+        ring: ,
+        background: ,
+        foreground: ,
+        primary: {
+          DEFAULT: ,
+          foreground: ,
+        },
+        secondary: {
+          DEFAULT: ,
+          foreground: ,
+        },
+        destructive: {
+          DEFAULT: ,
+          foreground: ,
+        },
+        muted: {
+          DEFAULT: ,
+          foreground: ,
+        },
+        accent: {
+          DEFAULT: ,
+          foreground: ,
+        },
+        popover: {
+          DEFAULT: ,
+          foreground: ,
+        },
+        card: {
+          DEFAULT: ,
+          foreground: ,
+        },
+      },
+      borderRadius: {
+        lg: ,
+        md: ,
+        sm: ,
+      },
+      keyframes: {
+        : {
+          from: { height: 0 },
+          to: { height:  },
+        },
+        : {
+          from: { height:  },
+          to: { height: 0 },
+        },
+      },
+      animation: {
+        : ,
+        : ,
+      },
+    },
+  },
+  plugins: [require()],
+}
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+// app\error.tsx
+;
+import Image from ;
+import Link from ;
+import { Button } from ;
+const Error = () => {
+  return ( 
+    <div className=>
+      <Image
+        src=
+        height=
+        width=
+        alt=
+        className=
+      />
+      <Image
+        src=
+        height=
+        width=
+        alt=
+        className=
+      />
+      <h2 className=>
+        Something went wrong!
+      </h2>
+      <Button asChild>
+        <Link href=>
+          Go back
+        </Link>
+      </Button>
+    </div>
+  );
+}
+ 
+export default Error;
+// app\globals.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html,
+body,
+:root {
+  height: 100%;
+}
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+ 
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+ 
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+ 
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+ 
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+ 
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+ 
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+ 
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+ 
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+ 
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+ 
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+ 
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+// app\layout.tsx
+import { Toaster } from ;
+import { Inter } from 
+import type { Metadata } from 
+import { ThemeProvider } from 
+import { ConvexClientProvider } from 
+import { ModalProvider } from ;
+import { EdgeStoreProvider } from ;
+import ClientWrapper from ;
+import 
+const inter = Inter({ subsets: [] })
+export const metadata: Metadata = {
+  title: ,
+  description: ,
+  icons: {
+    icon: [
+      {
+        media: ,
+        url: ,
+        href: ,
+      },
+      {
+        media: ,
+        url: ,
+        href: ,
+      }
+    ]
+  }
+}
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang= suppressHydrationWarning>
+      <body className={inter.className}>
+        <ConvexClientProvider>
+        <ClientWrapper>
+          <EdgeStoreProvider>
+            <ThemeProvider
+              attribute=
+              defaultTheme=
+              enableSystem
+              disableTransitionOnChange
+              storageKey=
+            >
+              <Toaster position= />
+              <ModalProvider />
+              {children}
+            </ThemeProvider>
+          </EdgeStoreProvider>
+          </ClientWrapper>
+        </ConvexClientProvider>
+      </body>
+    </html>
+  )
+}
+// app\(main)\layout.tsx
+;
+import { useConvexAuth } from ;
+import { redirect } from ;
+import { Spinner } from ;
+import { SearchCommand } from ;
+import { Navigation } from ;
+const MainLayout = ({
+  children
+}: {
+  children: React.ReactNode;
+}) => {
+  const { isAuthenticated, isLoading } = useConvexAuth();
+  if (isLoading) {
+    return (
+      <div className=>
+        <Spinner size= />
+      </div>
+    );
+  }
+  if (!isAuthenticated) {
+    return redirect();
+  }
+  return ( 
+    <div className=>
+      <Navigation />
+      <main className=>
+        <SearchCommand />
+        {children}
+      </main>
+    </div>
+   );
+}
+ 
+export default MainLayout;
+// app\(main)\(routes)\documents\page.tsx
+;
+import { useUser } from ;
+import { useMutation } from ;
+import { api } from ;
+import { Button } from ;
+import { PlusCircle } from ;
+import { useRouter } from ;
+import { toast } from ;
+import { useEffect, useState } from ;
+import { Id } from ;
+interface Workspace {
+  _id: Id<>;
+  _creationTime: number;
+  userId: string;
+  authorizedUsers: { userId: string; permission: string; }[];
+}
+const DocumentsPage = () => {
+  const router = useRouter();
+  const { user } = useUser();
+  const createDocument = useMutation(api.documents.create);
+  const getOrCreateWorkspace = useMutation(api.workspaces.getOrCreateUserWorkspace);
+  const [workspace, setWorkspace] = useState<Workspace | null>(null);
+  useEffect(() => {
+    const fetchWorkspace = async () => {
+      const ws = await getOrCreateWorkspace();
+      setWorkspace(ws);
+    };
+    fetchWorkspace();
+  }, [getOrCreateWorkspace]);
+  const onCreate = () => {
+    if (!workspace) return; 
+    const promise = createDocument({ title: , workspaceId: workspace._id })
+      .then((documentId) => router.push(`/documents/${documentId}`));
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error: ,
+    });
+  };
+  return (
+    <div className=>
+      <h2 className=>Welcome to {user?.firstName}&apos;s Jotion</h2>
+      <Button onClick={onCreate}>
+        <PlusCircle className= />
+        Create a note
+      </Button>
+    </div>
+  );
+};
+export default DocumentsPage;
+// app\(main)\(routes)\documents\[documentId]\page.tsx
+;
+import { useMutation, useQuery } from ;
+import dynamic from ;
+import { useMemo } from ;
+import { api } from ;
+import { Id } from ;
+import { Toolbar } from ;
+import { Cover } from ;
+import { Skeleton } from ;
+interface DocumentIdPageProps {
+  params: {
+    documentId: Id<>;
+  };
+};
+const DocumentIdPage = ({
+  params
+}: DocumentIdPageProps) => {
+  const Editor = useMemo(() => dynamic(() => import(), { ssr: false }) ,[]);
+  const document = useQuery(api.documents.getById, {
+    documentId: params.documentId
+  });
+  const update = useMutation(api.documents.update);
+  const onChange = (content: string) => {
+    update({
+      id: params.documentId,
+      content
+    });
+  };
+  if (document === undefined) {
+    return (
+      <div>
+        <Cover.Skeleton />
+        <div className=>
+          <div className=>
+            <Skeleton className= />
+            <Skeleton className= />
+            <Skeleton className= />
+            <Skeleton className= />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (document === null) {
+    return <div>Not found</div>
+  }
+  return ( 
+    <div className=>
+      <Cover url={document.coverImage} />
+      <div className=>
+        <Toolbar initialData={document} />
+        <Editor
+          onChange={onChange}
+          initialContent={document.content}
+        />
+      </div>
+    </div>
+   );
+}
+ 
+export default DocumentIdPage;
+// app\(main)\_components\banner.tsx
+;
+import { useRouter } from ;
+import { useMutation } from ;
+import { toast } from ;
+import { Id } from ;
+import { api } from ;
+import { Button } from ;
+import { ConfirmModal } from ;
+interface BannerProps {
+  documentId: Id<>;
+};
+export const Banner = ({
+  documentId
+}: BannerProps) => {
+  const router = useRouter();
+  const remove = useMutation(api.documents.remove);
+  const restore = useMutation(api.documents.restore);
+  const onRemove = () => {
+    const promise = remove({ id: documentId });
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error: 
+    });
+    router.push();
+  };
+  const onRestore = () => {
+    const promise = restore({ id: documentId });
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error: 
+    });
+  };
+  return (
+    <div className=>
+      <p>
+        This page is in the Trash.
+      </p>
+      <Button
+        size=
+        onClick={onRestore}
+        variant=
+        className=
+      >
+        Restore page
+      </Button>
+      <ConfirmModal onConfirm={onRemove}>
+        <Button
+          size=
+          variant=
+          className=
+        >
+          Delete forever
+        </Button>
+      </ConfirmModal>
+    </div>
+  )
+}
+// app\(main)\_components\document-list.tsx
+;
+import { useParams, useRouter } from ;
+import { useState } from ;
+import { useQuery } from ;
+import { FileIcon } from ;
+import { Doc, Id } from ;
+import { api } from ;
+import { cn } from ;
+import { Item } from ;
+interface DocumentListProps {
+  parentDocumentId?: Id<>;
+  level?: number;
+  data?: Doc<>[];
+}
+export const DocumentList = ({
+  parentDocumentId,
+  level = 0
+}: DocumentListProps) => {
+  const params = useParams();
+  const router = useRouter();
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const onExpand = (documentId: string) => {
+    setExpanded(prevExpanded => ({
+      ...prevExpanded,
+      [documentId]: !prevExpanded[documentId]
+    }));
+  };
+  const documents = useQuery(api.documents.getSidebar, {
+    parentDocument: parentDocumentId
+  });
+  const onRedirect = (documentId: string) => {
+    router.push(`/documents/${documentId}`);
+  };
+  if (documents === undefined) {
+    return (
+      <>
+        <Item.Skeleton level={level} />
+        {level === 0 && (
+          <>
+            <Item.Skeleton level={level} />
+            <Item.Skeleton level={level} />
+          </>
+        )}
+      </>
+    );
+  };
+  return (
+    <>
+      <p
+        style={{
+          paddingLeft: level ? `${(level * 12) + 25}px` : undefined
+        }}
+        className={cn(
+          ,
+          expanded && ,
+          level === 0 && 
+        )}
+      >
+        No pages inside
+      </p>
+      {documents.sort((a, b) => a.title.localeCompare(b.title)).map((document) => (
+        <div key={document._id}>
+          <Item
+            id={document._id}
+            onClick={() => onRedirect(document._id)}
+            label={document.title}
+            icon={FileIcon}
+            documentIcon={document.icon}
+            active={params.documentId === document._id}
+            level={level}
+            onExpand={() => onExpand(document._id)}
+            expanded={expanded[document._id]}
+          />
+          {expanded[document._id] && (
+            <DocumentList
+              parentDocumentId={document._id}
+              level={level + 1}
+            />
+          )}
+        </div>
+      ))}
+    </>
+  );
+};
+// app\(main)\_components\item.tsx
+;
+import { 
+  ChevronDown, 
+  ChevronRight, 
+  LucideIcon,
+  MoreHorizontal,
+  Plus,
+  Trash
+} from ;
+import { useMutation } from ;
+import { useRouter } from ;
+import { toast } from ;
+import { useUser } from ;
+import { Id } from ;
+import { cn } from ;
+import { Skeleton } from ;
+import { api } from ;
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator
+} from ;
+interface ItemProps {
+  id?: Id<>;
+  documentIcon?: string;
+  active?: boolean;
+  expanded?: boolean;
+  isSearch?: boolean;
+  level?: number;
+  onExpand?: () => void;
+  label: string;
+  onClick?: () => void;
+  icon: LucideIcon;
+};
+export const Item = ({
+  id,
+  label,
+  onClick,
+  icon: Icon,
+  active,
+  documentIcon,
+  isSearch,
+  level = 0,
+  onExpand,
+  expanded,
+}: ItemProps) => {
+  const { user } = useUser();
+  const router = useRouter();
+  const create = useMutation(api.documents.create);
+  const archive = useMutation(api.documents.archive);
+  const onArchive = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    if (!id) return;
+    const promise = archive({ id })
+      .then(() => router.push())
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error: 
+    });
+  };
+  const handleExpand = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    onExpand?.();
+  };
+  const onCreate = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    if (!id) return;
+    const promise = create({ title: , parentDocument: id })
+      .then((documentId) => {
+        if (!expanded) {
+          onExpand?.();
+        }
+        router.push(`/documents/${documentId}`);
+      });
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error: 
+    });
+  };
+  const ChevronIcon = expanded ? ChevronDown : ChevronRight;
+  return (
+    <div
+      onClick={onClick}
+      role=
+      style={{ 
+        paddingLeft: level ? `${(level * 12) + 12}px` : 
+      }}
+      className={cn(
+        ,
+        active && 
+      )}
+    >
+      {!!id && (
+        <div
+          role=
+          className=
+          onClick={handleExpand}
+        >
+          <ChevronIcon
+            className=
+          />
+        </div>
+      )}
+      {documentIcon ? (
+        <div className=>
+          {documentIcon}
+        </div>
+      ) : (
+        <Icon 
+          className=
+        />
+      )}
+      <span className=>
+        {label}
+      </span>
+      {isSearch && (
+        <kbd className=>
+          <span className=>⌘</span>K
+        </kbd>
+      )}
+      {!!id && (
+        <div className=>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              onClick={(e) => e.stopPropagation()}
+              asChild
+            >
+              <div
+                role=
+                className=
+              >
+                <MoreHorizontal className= />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className=
+              align=
+              side=
+              forceMount
+            >
+              <DropdownMenuItem onClick={onArchive}>
+                <Trash className= />
+                Delete
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <div className=>
+                Last edited by: {user?.fullName}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div
+            role=
+            onClick={onCreate}
+            className=
+          >
+            <Plus className= />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+Item.Skeleton = function ItemSkeleton({ level }: { level?: number }) {
+  return (
+    <div
+      style={{
+        paddingLeft: level ? `${(level * 12) + 25}px` : 
+      }}
+      className=
+    >
+      <Skeleton className= />
+      <Skeleton className= />
+    </div>
+  )
+}
+// app\(main)\_components\menu.tsx
+;
+import { useRouter } from ;
+import { useUser } from ;
+import { useMutation } from ;
+import { toast } from ;
+import { MoreHorizontal, Trash } from ;
+import { Id } from ;
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator
+} from ;
+import { api } from ;
+import { Button } from ;
+import { Skeleton } from ;
+interface MenuProps {
+  documentId: Id<>;
+};
+export const Menu = ({
+  documentId
+}: MenuProps) => {
+  const router = useRouter();
+  const { user } = useUser();
+  const archive = useMutation(api.documents.archive);
+  const onArchive = () => {
+    const promise = archive({ id: documentId })
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error: 
+    });
+    router.push();
+  };
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size= variant=>
+          <MoreHorizontal className= />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent 
+        className= 
+        align= 
+        alignOffset={8} 
+        forceMount
+      >
+        <DropdownMenuItem onClick={onArchive}>
+          <Trash className= />
+          Delete
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <div className=>
+          Last edited by: {user?.fullName}
+        </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+Menu.Skeleton = function MenuSkeleton() {
+  return (
+    <Skeleton className= />
+  )
+}
+// app\(main)\_components\navbar.tsx
+;
+import { useQuery } from ;
+import { useParams } from ;
+import { MenuIcon } from ;
+import { api } from ;
+import { Id } from ;
+import { Title } from ;
+import { Banner } from ;
+import { Menu } from ;
+import { Publish } from ;
+interface NavbarProps {
+  isCollapsed: boolean;
+  onResetWidth: () => void;
+};
+export const Navbar = ({
+  isCollapsed,
+  onResetWidth
+}: NavbarProps) => {
+  const params = useParams();
+  const document = useQuery(api.documents.getById, {
+    documentId: params.documentId as Id<>,
+  });
+  if (document === undefined) {
+    return (
+      <nav className=>
+        <Title.Skeleton />
+        <div className=>
+          <Menu.Skeleton />
+        </div>
+      </nav>
+    )
+  }
+  if (document === null) {
+    return null;
+  }
+  return (
+    <>
+      <nav className=>
+        {isCollapsed && (
+          <MenuIcon
+            role=
+            onClick={onResetWidth}
+            className=
+          />
+        )}
+        <div className=>
+          <Title initialData={document} />
+          <div className=>
+            <Publish initialData={document} />
+            <Menu documentId={document._id} />
+          </div>
+        </div>
+      </nav>
+      {document.isArchived && (
+        <Banner documentId={document._id} />
+      )}
+    </>
+  )
+}
+// app\(main)\_components\navigation.tsx
+;
+import {
+  ChevronsLeft,
+  MenuIcon,
+  Plus,
+  PlusCircle,
+  Search,
+  Settings,
+  Trash
+} from ;
+import { useParams, usePathname, useRouter } from ;
+import { ElementRef, useEffect, useRef, useState } from ;
+import { useMediaQuery } from ;
+import { useMutation } from ;
+import { toast } from ;
+import { cn } from ;
+import { api } from ;
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from ;
+import { useSearch } from ;
+import { useSettings } from ;
+import { UserItem } from ;
+import { Item } from ;
+import { DocumentList } from ;
+import { TrashBox } from ;
+import { Navbar } from ;
+import { PermissionsModal } from ;
+type SettingsType = {
+  onOpen?: () => void;
+  
+};
+export const Navigation = () => {
+  const router = useRouter();
+  const settings = useSettings() as SettingsType;
+  const search = useSearch();
+  const params = useParams();
+  const pathname = usePathname();
+  const isMobile = useMediaQuery();
+  const create = useMutation(api.documents.create);
+  const isResizingRef = useRef(false);
+  const sidebarRef = useRef<ElementRef<>>(null);
+  const navbarRef = useRef<ElementRef<>>(null);
+  const [isResetting, setIsResetting] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(isMobile);
+  const [isPermissionsModalOpen, setPermissionsModalOpen] = useState(false);
+  const openPermissionsModal = () => setPermissionsModalOpen(true);
+  const closePermissionsModal = () => setPermissionsModalOpen(false);
+  useEffect(() => {
+    if (isMobile) {
+      collapse();
+    } else {
+      resetWidth();
+    }
+  }, [isMobile]);
+  useEffect(() => {
+    if (isMobile) {
+      collapse();
+    }
+  }, [pathname, isMobile]);
+  const handleMouseDown = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    isResizingRef.current = true;
+    document.addEventListener(, handleMouseMove);
+    document.addEventListener(, handleMouseUp);
+  };
+  const handleMouseMove = (event: MouseEvent) => {
+    if (!isResizingRef.current) return;
+    let newWidth = event.clientX;
+    if (newWidth < 240) newWidth = 240;
+    if (newWidth > 480) newWidth = 480;
+    if (sidebarRef.current && navbarRef.current) {
+      sidebarRef.current.style.width = `${newWidth}px`;
+      navbarRef.current.style.setProperty(, `${newWidth}px`);
+      navbarRef.current.style.setProperty(, `calc(100% - ${newWidth}px)`);
+    }
+  };
+  const handleMouseUp = () => {
+    isResizingRef.current = false;
+    document.removeEventListener(, handleMouseMove);
+    document.removeEventListener(, handleMouseUp);
+  };
+  const resetWidth = () => {
+    if (sidebarRef.current && navbarRef.current) {
+      setIsCollapsed(false);
+      setIsResetting(true);
+      sidebarRef.current.style.width = isMobile ?  : ;
+      navbarRef.current.style.setProperty(
+        ,
+        isMobile ?  : 
+      );
+      navbarRef.current.style.setProperty(
+        ,
+        isMobile ?  : 
+      );
+      setTimeout(() => setIsResetting(false), 300);
+    }
+  };
+  const collapse = () => {
+    if (sidebarRef.current && navbarRef.current) {
+      setIsCollapsed(true);
+      setIsResetting(true);
+      sidebarRef.current.style.width = ;
+      navbarRef.current.style.setProperty(, );
+      navbarRef.current.style.setProperty(, );
+      setTimeout(() => setIsResetting(false), 300);
+    }
+  };
+  const handleCreate = () => {
+    const promise = create({ title:  })
+      .then((documentId) => router.push(`/documents/${documentId}`));
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error: 
+    });
+  };
+  return (
+    <>
+      <aside
+        ref={sidebarRef}
+        className={cn(
+          ,
+          isResetting && ,
+          isMobile && 
+        )}
+      >
+        <div
+          onClick={collapse}
+          role=
+          title=
+          className={cn(
+            ,
+            isMobile && 
+          )}
+        >
+          <ChevronsLeft className= />
+        </div>
+        <div>
+          <UserItem />
+          <Item
+            label=
+            icon={Search}
+            isSearch
+            onClick={search.onOpen}
+          />
+          <Item
+            label=
+            icon={Settings}
+            onClick={settings.onOpen}
+          />
+          <Item
+            onClick={handleCreate}
+            label=
+            icon={PlusCircle}
+          />
+          <Item
+            label=
+            icon={Settings}
+            onClick={openPermissionsModal}
+          />
+        </div>
+        <div className=>
+          <DocumentList />
+          <Item
+            onClick={handleCreate}
+            icon={Plus}
+            label=
+          />
+          <Popover>
+            <PopoverTrigger className=>
+              <Item label= icon={Trash} />
+            </PopoverTrigger>
+            <PopoverContent
+              className=
+              side={isMobile ?  : }
+            >
+              <TrashBox />
+            </PopoverContent>
+          </Popover>
+        </div>
+        <div
+          onMouseDown={handleMouseDown}
+          onClick={resetWidth}
+          className=
+        />
+      </aside>
+      <div
+        ref={navbarRef}
+        className={cn(
+          ,
+          isResetting && ,
+          isMobile && 
+        )}
+      >
+        {!!params.documentId ? (
+          <Navbar
+            isCollapsed={isCollapsed}
+            onResetWidth={resetWidth}
+          />
+        ) : (
+          <nav className=>
+            {isCollapsed && <MenuIcon onClick={resetWidth} role= className= />}
+          </nav>
+        )}
+      </div>
+      <PermissionsModal
+        isOpen={isPermissionsModalOpen}
+        onClose={closePermissionsModal}
+        workspaceId= 
+      />
+    </>
+  );
+};
+// app\(main)\_components\publish.tsx
+;
+import { useState } from ;
+import { useMutation } from ;
+import { toast } from ;
+import { Check, Copy, Globe } from ;
+import { Doc } from ;
+import {
+  PopoverTrigger,
+  Popover,
+  PopoverContent
+} from ;
+import { useOrigin } from ;
+import { api } from ;
+import { Button } from ;
+interface PublishProps {
+  initialData: Doc<>;
+}
+export const Publish = ({ initialData }: PublishProps) => {
+  const origin = useOrigin();
+  const update = useMutation(api.documents.update);
+  const [copied, setCopied] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const url = `${origin}/preview/${initialData._id}`;
+  const onPublish = () => {
+    setIsSubmitting(true);
+    const promise = update({
+      id: initialData._id,
+      isPublished: true,
+    }).finally(() => setIsSubmitting(false));
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error: ,
+    });
+  };
+  const onUnpublish = () => {
+    setIsSubmitting(true);
+    const promise = update({
+      id: initialData._id,
+      isPublished: false,
+    }).finally(() => setIsSubmitting(false));
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error: ,
+    });
+  };
+  const onCopy = () => {
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+  };
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button size= variant=>
+          Publish
+          {initialData.isPublished && (
+            <Globe className= />
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        className=
+        align=
+        alignOffset={8}
+        forceMount
+      >
+        {initialData.isPublished ? (
+          <div className=>
+            <div className=>
+              <Globe className= />
+              <p className=>
+                This note is live on web.
+              </p>
+            </div>
+            <div className=>
+              <input
+                className=
+                value={url}
+                disabled
+                title=
+              />
+              <Button
+                onClick={onCopy}
+                disabled={copied}
+                className=
+              >
+                {copied ? (
+                  <Check className= />
+                ) : (
+                  <Copy className= />
+                )}
+              </Button>
+            </div>
+            <Button
+              size=
+              className=
+              disabled={isSubmitting}
+              onClick={onUnpublish}
+            >
+              Unpublish
+            </Button>
+          </div>
+        ) : (
+          <div className=>
+            <Globe
+              className=
+            />
+            <p className=>
+              Publish this note
+            </p>
+            <span className=>
+              Share your work with others.
+            </span>
+            <Button
+              disabled={isSubmitting}
+              onClick={onPublish}
+              className=
+              size=
+            >
+              Publish
+            </Button>
+          </div>
+        )}
+      </PopoverContent>
+    </Popover>
+  );
+};
+// app\(main)\_components\title.tsx
+;
+import { useRef, useState } from ;
+import { useMutation } from ;
+import { Doc } from ;
+import { api } from ;
+import { Input } from ;
+import { Button } from ;
+import { Skeleton } from ;
+interface TitleProps {
+  initialData: Doc<>;
+};
+export const Title = ({
+  initialData
+}: TitleProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const update = useMutation(api.documents.update);
+  const [title, setTitle] = useState(initialData.title || );
+  const [isEditing, setIsEditing] = useState(false);
+  const enableInput = () => {
+    setTitle(initialData.title);
+    setIsEditing(true);
+    setTimeout(() => {
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(0, inputRef.current.value.length)
+    }, 0);
+  };
+  const disableInput = () => {
+    setIsEditing(false);
+  };
+  const onChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setTitle(event.target.value);
+    update({
+      id: initialData._id,
+      title: event.target.value || 
+    });
+  };
+  const onKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === ) {
+      disableInput();
+    }
+  };
+  return (
+    <div className=>
+      {!!initialData.icon && <p>{initialData.icon}</p>}
+      {isEditing ? (
+        <Input
+          ref={inputRef}
+          onClick={enableInput}
+          onBlur={disableInput}
+          onChange={onChange}
+          onKeyDown={onKeyDown}
+          value={title}
+          className=
+        />
+      ) : (
+        <Button
+          onClick={enableInput}
+          variant=
+          size=
+          className=
+        >
+          <span className=>
+            {initialData?.title}
+          </span>
+        </Button>
+      )}
+    </div>
+  )
+}
+Title.Skeleton = function TitleSkeleton() {
+  return (
+    <Skeleton className= />
+  );
+};
+// app\(main)\_components\trash-box.tsx
+;
+import { useState } from ;
+import { useParams, useRouter } from ;
+import { useQuery, useMutation } from ;
+import { Search, Trash, Undo } from ;
+import { toast } from ;
+import { api } from ;
+import { Id } from ;
+import { Spinner } from ;
+import { Input } from ;
+import { ConfirmModal } from ;
+export const TrashBox = () => {
+  const router = useRouter();
+  const params = useParams();
+  const documents = useQuery(api.documents.getTrash);
+  const restore = useMutation(api.documents.restore);
+  const remove = useMutation(api.documents.remove);
+  const [search, setSearch] = useState();
+  const filteredDocuments = documents?.filter((document) => {
+    return document.title.toLowerCase().includes(search.toLowerCase());
+  });
+  const onClick = (documentId: string) => {
+    router.push(`/documents/${documentId}`);
+  };
+  const onRestore = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    documentId: Id<>,
+  ) => {
+    event.stopPropagation();
+    const promise = restore({ id: documentId });
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error:
+    });
+  };
+  const onRemove = (
+    documentId: Id<>,
+  ) => {
+    const promise = remove({ id: documentId });
+    toast.promise(promise, {
+      loading: ,
+      success: ,
+      error:
+    });
+    if (params.documentId === documentId) {
+      router.push();
+    }
+  };
+  if (documents === undefined) {
+    return (
+      <div className=>
+        <Spinner size= />
+      </div>
+    );
+  }
+  return (
+    <div className=>
+      <div className=>
+        <Search className= />
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className=
+          placeholder=
+        />
+      </div>
+      <div className=>
+        <p className=>
+          No documents found.
+        </p>
+        {filteredDocuments?.map((document) => (
+          <div
+            key={document._id}
+            role=
+            onClick={() => onClick(document._id)}
+            className=
+          >
+            <span className=>
+              {document.title}
+            </span>
+            <div className=>
+              <div
+                onClick={(e) => onRestore(e, document._id)}
+                role=
+                className=
+              >
+                <Undo className= />
+              </div>
+              <ConfirmModal onConfirm={() => onRemove(document._id)}>
+                <div
+                  role=
+                  className=
+                >
+                  <Trash className= />
+                </div>
+              </ConfirmModal>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+// app\(main)\_components\user-item.tsx
+;
+import { ChevronsLeftRight } from ;
+import { useUser, SignOutButton } from ;
+import {
+  Avatar,
+  AvatarImage
+} from ;
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from ;
+export const UserItem = () => {
+  const { user } = useUser();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <div role= className=>
+          <div className=>
+            <Avatar className=>
+              <AvatarImage src={user?.imageUrl} />
+            </Avatar>
+            <span className=>
+              {user?.fullName}&apos;s Jotion
+            </span>
+          </div>
+          <ChevronsLeftRight className= />
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className=
+        align=
+        alignOffset={11}
+        forceMount
+      >
+        <div className=>
+          <p className=>
+            {user?.emailAddresses[0].emailAddress}
+          </p>
+          <div className=>
+            <div className=> 
+              <Avatar className=>
+                <AvatarImage src={user?.imageUrl} />
+              </Avatar>
+            </div>
+            <div className=>
+              <p className=>
+                {user?.fullName}&apos;s Jotion
+              </p>
+            </div>
+          </div>
+        </div>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild className=>
+          <SignOutButton>
+            Log out
+          </SignOutButton>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+// app\(marketing)\layout.tsx
+import { Navbar } from ;
+const MarketingLayout = ({
+  children
+}: {
+  children: React.ReactNode;
+}) => {
+  return ( 
+    <div className=>
+      <Navbar />
+      <main className=>
+        {children}
+      </main>
+    </div>
+   );
+}
+ 
+export default MarketingLayout;
+// app\(marketing)\page.tsx
+import { Footer } from ;
+import { Heading } from ;
+import { Heroes } from ;
+const MarketingPage = () => {
+  return (
+    <div className=>
+      <div className=>
+        <Heading />
+        <Heroes />
+      </div>
+      <Footer />
+    </div>
+  );
+}
+export default MarketingPage;
+// app\(marketing)\_components\footer.tsx
+import { Button } from 
+import { Logo } from 
+export const Footer = () => {
+  return (
+    <div className=>
+      <Logo />
+      <div className=>
+        <Button variant= size=>
+          Privacy Policy
+        </Button>
+        <Button variant= size=>
+          Terms & Conditions
+        </Button>
+      </div>
+    </div>
+  )
+}
+// app\(marketing)\_components\heading.tsx
+;
+import { useConvexAuth } from ;
+import { ArrowRight } from ;
+import { SignInButton } from ;
+import Link from ;
+import { Button } from ;
+import { Spinner } from ;
+export const Heading = () => {
+  const { isAuthenticated, isLoading } = useConvexAuth();
+  return (
+    <div className=>
+      <h1 className=>
+        Your Ideas, Documents, & Plans. Unified. Welcome to <span className=>Jotion</span>
+      </h1>
+      <h3 className=>
+        Jotion is the connected workspace where <br />
+        better, faster work happens.
+      </h3>
+      {isLoading && (
+        <div className=>
+          <Spinner size= />
+        </div>
+      )}
+      {isAuthenticated && !isLoading && (
+        <Button asChild>
+          <Link href=>
+            Enter Jotion
+            <ArrowRight className= />
+          </Link>
+        </Button>
+      )}
+      {!isAuthenticated && !isLoading && (
+        <SignInButton mode=>
+          <Button>
+            Get Jotion free
+            <ArrowRight className= />
+          </Button>
+        </SignInButton>
+      )}
+    </div>
+  )
+}
+// app\(marketing)\_components\heroes.tsx
+import Image from ;
+export const Heroes = () => {
+  return (
+    <div className=>
+      <div className=>
+        <div className=>
+          <Image
+            src=
+            fill
+            className=
+            alt=
+          />
+          <Image
+            src=
+            fill
+            className=
+            alt=
+          />
+        </div>
+        <div className=>
+          <Image
+            src=
+            fill
+            className=
+            alt=
+          />
+          <Image
+            src=
+            fill
+            className=
+            alt=
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+// app\(marketing)\_components\logo.tsx
+import Image from ;
+import { Poppins } from ;
+import { cn } from ;
+const font = Poppins({
+  subsets: [],
+  weight: [, ]
+});
+export const Logo = () => {
+  return (
+    <div className=>
+      <Image
+        src=
+        height=
+        width=
+        alt=
+        className=
+      />
+      <Image
+        src=
+        height=
+        width=
+        alt=
+        className=
+      />
+      <p className={cn(, font.className)}>
+        Jotion
+      </p>
+    </div>
+  )
+}
+// app\(marketing)\_components\navbar.tsx
+;
+import { useConvexAuth } from ;
+import { SignInButton, UserButton } from ;
+import Link from ;
+import { useScrollTop } from ;
+import { ModeToggle } from ;
+import { Button } from ;
+import { Spinner } from ;
+import { cn } from ;
+import { Logo } from ;
+export const Navbar = () => {
+  const { isAuthenticated, isLoading } = useConvexAuth();
+  const scrolled = useScrollTop();
+  return (
+    <div className={cn(
+      ,
+      scrolled && 
+    )}>
+      <Logo />
+      <div className=>
+        {isLoading && (
+          <Spinner />
+        )}
+        {!isAuthenticated && !isLoading && (
+          <>
+            <SignInButton mode=>
+              <Button variant= size=>
+                Log in
+              </Button>
+            </SignInButton>
+            <SignInButton mode=>
+              <Button size=>
+                Get Jotion free
+              </Button>
+            </SignInButton>
+          </>
+        )}
+        {isAuthenticated && !isLoading && (
+          <>
+            <Button variant= size= asChild>
+              <Link href=>
+                Enter Jotion
+              </Link>
+            </Button>
+            <UserButton
+              afterSignOutUrl=
+            />
+          </>
+        )}
+        <ModeToggle />
+      </div>
+    </div>
+  )
+}
+// app\(public)\layout.tsx
+const PublicLayout = ({
+  children
+}: {
+  children: React.ReactNode;
+}) => {
+  return ( 
+    <div className=>
+      {children}
+    </div>
+   );
+}
+ 
+export default PublicLayout;
+// app\(public)\(routes)\preview\[documentId]\page.tsx
+;
+import { useMutation, useQuery } from ;
+import dynamic from ;
+import { useMemo } from ;
+import { api } from ;
+import { Id } from ;
+import { Toolbar } from ;
+import { Cover } from ;
+import { Skeleton } from ;
+interface DocumentIdPageProps {
+  params: {
+    documentId: Id<>;
+  };
+};
+const DocumentIdPage = ({
+  params
+}: DocumentIdPageProps) => {
+  const Editor = useMemo(() => dynamic(() => import(), { ssr: false }) ,[]);
+  const document = useQuery(api.documents.getById, {
+    documentId: params.documentId
+  });
+  const update = useMutation(api.documents.update);
+  const onChange = (content: string) => {
+    update({
+      id: params.documentId,
+      content
+    });
+  };
+  if (document === undefined) {
+    return (
+      <div>
+        <Cover.Skeleton />
+        <div className=>
+          <div className=>
+            <Skeleton className= />
+            <Skeleton className= />
+            <Skeleton className= />
+            <Skeleton className= />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (document === null) {
+    return <div>Not found</div>
+  }
+  return ( 
+    <div className=>
+      <Cover preview url={document.coverImage} />
+      <div className=>
+        <Toolbar preview initialData={document} />
+        <Editor
+          editable={false}
+          onChange={onChange}
+          initialContent={document.content}
+        />
+      </div>
+    </div>
+  );
+}
+ 
+export default DocumentIdPage;
+// app\api\edgestore\[...edgestore]\route.ts
+import { NextApiRequest, NextApiResponse } from ;
+import { initEdgeStore } from ;
+import { createEdgeStoreNextHandler } from ;
+ 
+const es = initEdgeStore.create();
+ 
+const edgeStoreRouter = es.router({
+  publicFiles: es.fileBucket()
+    .beforeDelete(() => {
+      return true;
+    }),
+});
+ 
+const handler = createEdgeStoreNextHandler({
+  router: edgeStoreRouter,
+});
+ 
+export { handler as GET, handler as POST };
+export { edgeStoreRouter }; 
+ 
+export type EdgeStoreRouter = typeof edgeStoreRouter;
+// app\api\syncuserprofile\route.ts
+import { NextApiRequest, NextApiResponse } from ;
+import { getAuth } from ;
+import { clerkClient } from ;
+import { api } from ;
+import { fetchMutation } from ;
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { userId } = getAuth(req);
+  if (!userId) {
+    return res.status(401).json({ error:  });
+  }
+  const user = await clerkClient.users.getUser(userId);
+  const profileData = {
+    avatar: user.imageUrl || ,
+    displayName: user.fullName || , 
+    email: user.emailAddresses[0].emailAddress,
+  };
+  try {
+    await fetchMutation(api.userprofile.upsertUserProfile, {
+      clerkUserId: user.id,
+      profileData,
+    });
+    res.status(200).json({ message:  });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+}
+// app\api\userProfiles\route.ts
+import { NextApiRequest, NextApiResponse } from ;
+import { api } from ; 
+import { fetchQuery, fetchMutation } from ;
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  switch (req.method) {
+    case :
+      try {
+        const userProfiles = await fetchQuery(api.userprofile.getAllUserProfiles);
+        res.status(200).json(userProfiles);
+      } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message :  });
+      }
+      break;
+    case :
+      try {
+        const { clerkUserId, profileData } = req.body;
+        const newUserProfile = await fetchMutation(api.userprofile.upsertUserProfile, { clerkUserId, profileData });
+        res.status(201).json(newUserProfile);
+      } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message :  });
+      }
+      break;
+    default:
+      res.status(405).json({ error:  });
+      break;
+  }
+}
+// app\api\workspaces\route.ts
+import { NextApiRequest, NextApiResponse } from ;
+import { api } from ; 
+import { fetchQuery, fetchMutation } from ;
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  switch (req.method) {
+    case :
+      try {
+        const workspaces = await fetchQuery(api.workspaces.getAll);
+        res.status(200).json(workspaces);
+      } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message :  });
+      }
+      break;
+    case :
+      try {
+        const { name, ownerId } = req.body;
+        const newWorkspace = await fetchMutation(api.workspaces.create, { name, ownerId });
+        res.status(201).json(newWorkspace);
+      } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message :  });
+      }
+      break;
+    case :
+      try {
+        const { workspaceId, userId, permission } = req.body;
+        const updatedMembers = await fetchMutation(api.workspaces.updateWorkspacePermissions, { workspaceId, userId, permission });
+        res.status(200).json({ message: , updatedMembers });
+      } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message :  });
+      }
+      break;
+    default:
+      res.status(405).json({ error:  });
+      break;
+  }
+}
+// components\clientwrapper.tsx
+;
+import { ReactNode } from ;
+import { useSyncUserProfile } from ;
+interface ClientWrapperProps {
+  children: ReactNode;
+}
+const ClientWrapper = ({ children }: ClientWrapperProps) => {
+  useSyncUserProfile();
+  return <>{children}</>;
+};
+export default ClientWrapper;
+// components\cover.tsx
+;
+import Image from ;
+import { ImageIcon, X } from ;
+import { useMutation } from ;
+import { useParams } from ;
+import { Skeleton } from ;
+import { cn } from ;
+import { Button } from ;
+import { useCoverImage } from ;
+import { api } from ;
+import { Id } from ;
+import { useEdgeStore } from ;
+interface CoverImageProps {
+  url?: string;
+  preview?: boolean;
+}
+export const Cover = ({
+  url,
+  preview,
+}: CoverImageProps) => {
+  const { edgestore } = useEdgeStore();
+  const params = useParams();
+  const coverImage = useCoverImage();
+  const removeCoverImage = useMutation(api.documents.removeCoverImage);
+  const onRemove = async () => {
+    if (url) {
+      await edgestore.publicFiles.delete({
+        url: url
+      })
+    }
+    removeCoverImage({
+      id: params.documentId as Id<>
+    });
+  };
+  return (
+    <div className={cn(
+      ,
+      !url && ,
+      url && 
+    )}>
+      {!!url && (
+        <Image
+          src={url}
+          fill
+          alt=
+          className=
+        />
+      )}
+      {url && !preview && (
+        <div className=>
+          <Button
+            onClick={() => coverImage.onReplace(url)}
+            className=
+            variant=
+            size=
+          >
+            <ImageIcon className= />
+            Change cover
+          </Button>
+          <Button
+            onClick={onRemove}
+            className=
+            variant=
+            size=
+          >
+            <X className= />
+            Remove
+          </Button>
+        </div>
+      )}
+    </div>
+  )
+}
+Cover.Skeleton = function CoverSkeleton() {
+  return (
+    <Skeleton className= />
+  )
+}
+// components\document-list.tsx
+;
+import { DragDropContext, Droppable, Draggable } from ;
+import { useParams, useRouter } from ;
+import { useState } from ;
+import { useQuery, useMutation } from ;
+import { api } from ;
+import Item from ;
+import { FileIcon } from ;
+import { Id } from ;
+interface Document {
+  _id: Id<>;
+  title: string;
+  icon?: string;
+  parentDocument?: Id<>;
+}
+export const DocumentList = ({ parentDocumentId, level = 0 }: { parentDocumentId?: Id<>; level?: number }) => {
+  const params = useParams();
+  const router = useRouter();
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const updateDocument = useMutation(api.documents.update);
+  const documents = useQuery(api.documents.getSidebar, { parentDocument: parentDocumentId });
+  const onExpand = (documentId: string) => {
+    setExpanded((prevExpanded) => ({
+      ...prevExpanded,
+      [documentId]: !prevExpanded[documentId],
+    }));
+  };
+  const onRedirect = (documentId: string) => {
+    router.push(`/documents/${documentId}`);
+  };
+  const onDragEnd = async (result: any) => {
+    if (!result.destination) return;
+    const { draggableId, destination } = result;
+    await updateDocument({
+      id: draggableId as Id<>,
+      parentDocument: destination.droppableId ? (destination.droppableId as Id<>) : undefined,
+    });
+  };
+  if (documents === undefined) {
+    return (
+      <>
+        <Item.Skeleton level={level} />
+        {level === 0 && (
+          <>
+            <Item.Skeleton level={level} />
+            <Item.Skeleton level={level} />
+          </>
+        )}
+      </>
+    );
+  }
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId={parentDocumentId || }>
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            {documents.sort((a, b) => a.title.localeCompare(b.title)).map((document: Document, index: number) => (
+              <Draggable key={document._id} draggableId={document._id} index={index}>
+                {(provided) => (
+                  <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                    <Item
+                      id={document._id}
+                      onClick={() => onRedirect(document._id)}
+                      label={document.title}
+                      icon={FileIcon}
+                      documentIcon={document.icon}
+                      active={params.documentId === document._id}
+                      level={level}
+                      onExpand={() => onExpand(document._id)}
+                      expanded={expanded[document._id]}
+                    />
+                    {expanded[document._id] && (
+                      <DocumentList
+                        parentDocumentId={document._id}
+                        level={level + 1}
+                      />
+                    )}
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
+  );
+};
+export default DocumentList;
+// components\editor.tsx
+;
+import { useTheme } from ;
+import {
+  BlockNoteEditor,
+  PartialBlock
+} from ;
+import {
+  BlockNoteView,
+  useBlockNote
+} from ;
+import ;
+import { useEdgeStore } from ;
+interface EditorProps {
+  onChange: (value: string) => void;
+  initialContent?: string;
+  editable?: boolean;
+};
+const Editor = ({
+  onChange,
+  initialContent,
+  editable
+}: EditorProps) => {
+  const { resolvedTheme } = useTheme();
+  const { edgestore } = useEdgeStore();
+  const handleUpload = async (file: File) => {
+    const response = await edgestore.publicFiles.upload({ 
+      file
+    });
+    return response.url;
+  }
+  const editor: BlockNoteEditor = useBlockNote({
+    editable,
+    initialContent: 
+      initialContent 
+      ? JSON.parse(initialContent) as PartialBlock[] 
+      : undefined,
+    onEditorContentChange: (editor) => {
+      onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
+    },
+    uploadFile: handleUpload
+  })
+  return (
+    <div>
+      <BlockNoteView
+        editor={editor}
+        theme={resolvedTheme ===  ?  : }
+      />
+    </div>
+  )
+}
+export default Editor;
+// components\icon-picker.tsx
+;
+import EmojiPicker, { Theme } from ;
+import { useTheme } from ;
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from ;
+interface IconPickerProps {
+  onChange: (icon: string) => void;
+  children: React.ReactNode;
+  asChild?: boolean;
+};
+export const IconPicker = ({
+  onChange,
+  children,
+  asChild
+}: IconPickerProps) => {
+  const { resolvedTheme } = useTheme();
+  const currentTheme = (resolvedTheme || ) as keyof typeof themeMap
+  const themeMap = {
+    : Theme.DARK,
+    : Theme.LIGHT
+  };
+  const theme = themeMap[currentTheme];
+  return (
+    <Popover>
+      <PopoverTrigger asChild={asChild}>
+        {children}
+      </PopoverTrigger>
+      <PopoverContent className=>
+        <EmojiPicker
+          height={350}
+          theme={theme}
+          onEmojiClick={(data) => onChange(data.emoji)}
+        />
+      </PopoverContent>
+    </Popover>
+  );
+};
+// components\item.module.css
+.item {
+  /* Add your styles here */
+}
+.skeleton {
+  /* Add your styles here */
+}
+// components\item.tsx
+import React, { FC } from ;
+import { Skeleton } from ; 
+import styles from ; 
+interface ItemProps {
+  id: string;
+  label: string;
+  icon: React.ElementType;
+  documentIcon?: string;
+  active?: boolean;
+  level?: number;
+  onClick?: () => void;
+  onExpand?: () => void;
+  expanded?: boolean;
+}
+const Item: FC<ItemProps> & { Skeleton: FC<{ level?: number }> } = ({
+  id,
+  label,
+  icon: Icon,
+  documentIcon,
+  active,
+  level = 0,
+  onClick,
+  onExpand,
+  expanded,
+}) => {
+  return (
+    <div onClick={onClick} role= className={styles.item} style={{ paddingLeft: level ? `${(level * 12) + 12}px` : undefined }}>
+      {documentIcon ? (
+        <div>{documentIcon}</div>
+      ) : (
+        <Icon />
+      )}
+      <span>{label}</span>
+    </div>
+  );
+};
+Item.Skeleton = ({ level }: { level?: number }) => (
+  <div className={styles.skeleton} style={{ paddingLeft: level ? `${(level * 12) + 25}px` : undefined }}>
+    <Skeleton />
+  </div>
+);
+Item.displayName = ;
+Item.Skeleton.displayName = ;
+export default Item;
+// components\mode-toggle.tsx
+import * as React from 
+import { Moon, Sun } from 
+import { useTheme } from 
+import { Button } from 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from 
+export function ModeToggle() {
+  const { setTheme } = useTheme()
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant= size=>
+          <Sun className= />
+          <Moon className= />
+          <span className=>Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align=>
+        <DropdownMenuItem onClick={() => setTheme()}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme()}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme()}>
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+// components\permissions.tsx
+;
+import * as React from ;
+import { User } from ;
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem } from ;
+interface UserProfile {
+  userId: string;
+  displayName: string;
+  permission?: string;
+}
+type OnPermissionChange = (userId: string, permission: string) => void;
+interface PermissionsControlProps {
+  userProfiles: UserProfile[];
+  permissions: string[];
+  onPermissionChange: OnPermissionChange;
+}
+export default function PermissionsControl({ userProfiles, permissions, onPermissionChange }: PermissionsControlProps) {
+  return (
+    <div className=>
+      {userProfiles.map((user) => (
+        <div key={user.userId} className=>
+          <span className=>{user.displayName}</span>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className=>
+                <User className= />
+                {user.permission || }
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align= className=>
+              {permissions.map((perm) => (
+                <DropdownMenuItem key={perm} onSelect={() => onPermissionChange(user.userId, perm)}>
+                  {perm}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      ))}
+    </div>
+  );
+}
+// components\search-command.tsx
+;
+import { useEffect, useState } from ;
+import { File } from ;
+import { useQuery } from ;
+import { useRouter } from ;
+import { useUser } from ;
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from ;
+import { useSearch } from ;
+import { api } from ;
+export const SearchCommand = () => {
+  const { user } = useUser();
+  const router = useRouter();
+  const documents = useQuery(api.documents.getSearch);
+  const [isMounted, setIsMounted] = useState(false);
+  const toggle = useSearch((store) => store.toggle);
+  const isOpen = useSearch((store) => store.isOpen);
+  const onClose = useSearch((store) => store.onClose);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key ===  && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        toggle();
+      }
+    }
+    document.addEventListener(, down);
+    return () => document.removeEventListener(, down);
+  }, [toggle]);
+  const onSelect = (id: string) => {
+    router.push(`/documents/${id}`);
+    onClose();
+  };
+  if (!isMounted) {
+    return null;
+  }
+  return (
+    <CommandDialog open={isOpen} onOpenChange={onClose}>
+      <CommandInput
+        placeholder={`Search ${user?.fullName}'s Jotion...`}
+      />
+      <CommandList>
+        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandGroup heading=>
+          {documents?.map((document) => (
+            <CommandItem
+              key={document._id}
+              value={`${document._id}-${document.title}`}
+              title={document.title}
+              onSelect={() => onSelect(document._id)}
+            >
+              {document.icon ? (
+                <p className=>
+                  {document.icon}
+                </p>
+              ) : (
+                <File className= />
+              )}
+              <span>
+                {document.title}
+              </span>
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      </CommandList>
+    </CommandDialog>
+  )
+}
+// components\single-image-dropzone.tsx
+;
+import { UploadCloudIcon, X } from ;
+import * as React from ;
+import { useDropzone, type DropzoneOptions } from ;
+import { twMerge } from ;
+import { Spinner } from ;
+const variants = {
+  base: ,
+  image:
+    ,
+  active: ,
+  disabled:
+    ,
+  accept: ,
+  reject: ,
+};
+type InputProps = {
+  width?: number;
+  height?: number;
+  className?: string;
+  value?: File | string;
+  onChange?: (file?: File) => void | Promise<void>;
+  disabled?: boolean;
+  dropzoneOptions?: Omit<DropzoneOptions, >;
+};
+const ERROR_MESSAGES = {
+  fileTooLarge(maxSize: number) {
+    return `The file is too large. Max size is ${formatFileSize(maxSize)}.`;
+  },
+  fileInvalidType() {
+    return ;
+  },
+  tooManyFiles(maxFiles: number) {
+    return `You can only add ${maxFiles} file(s).`;
+  },
+  fileNotSupported() {
+    return ;
+  },
+};
+const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
+  (
+    { dropzoneOptions, width, height, value, className, disabled, onChange },
+    ref,
+  ) => {
+    const imageUrl = React.useMemo(() => {
+      if (typeof value === ) {
+        
+        return value;
+      } else if (value) {
+        
+        return URL.createObjectURL(value);
+      }
+      return null;
+    }, [value]);
+    
+    const {
+      getRootProps,
+      getInputProps,
+      acceptedFiles,
+      fileRejections,
+      isFocused,
+      isDragAccept,
+      isDragReject,
+    } = useDropzone({
+      accept: { : [] },
+      multiple: false,
+      disabled,
+      onDrop: (acceptedFiles) => {
+        const file = acceptedFiles[0];
+        if (file) {
+          void onChange?.(file);
+        }
+      },
+      ...dropzoneOptions,
+    });
+    
+    const dropZoneClassName = React.useMemo(
+      () =>
+        twMerge(
+          variants.base,
+          isFocused && variants.active,
+          disabled && variants.disabled,
+          imageUrl && variants.image,
+          (isDragReject ?? fileRejections[0]) && variants.reject,
+          isDragAccept && variants.accept,
+          className,
+        ).trim(),
+      [
+        isFocused,
+        imageUrl,
+        fileRejections,
+        isDragAccept,
+        isDragReject,
+        disabled,
+        className,
+      ],
+    );
+    
+    const errorMessage = React.useMemo(() => {
+      if (fileRejections[0]) {
+        const { errors } = fileRejections[0];
+        if (errors[0]?.code === ) {
+          return ERROR_MESSAGES.fileTooLarge(dropzoneOptions?.maxSize ?? 0);
+        } else if (errors[0]?.code === ) {
+          return ERROR_MESSAGES.fileInvalidType();
+        } else if (errors[0]?.code === ) {
+          return ERROR_MESSAGES.tooManyFiles(dropzoneOptions?.maxFiles ?? 0);
+        } else {
+          return ERROR_MESSAGES.fileNotSupported();
+        }
+      }
+      return undefined;
+    }, [fileRejections, dropzoneOptions]);
+    return (
+      <div className=>
+        {disabled && (
+          <div className=>
+            <Spinner size= />
+          </div>
+        )}
+        <div
+          {...getRootProps({
+            className: dropZoneClassName,
+            style: {
+              width,
+              height,
+            },
+          })}
+        >
+          {}
+          <input ref={ref} {...getInputProps()} />
+          {imageUrl ? (
+            
+            <img
+              className=
+              src={imageUrl}
+              alt={acceptedFiles[0]?.name}
+            />
+          ) : (
+            
+            <div className=>
+              <UploadCloudIcon className= />
+              <div className=>
+                Click or drag file to this area to upload
+              </div>
+            </div>
+          )}
+          {}
+          {imageUrl && !disabled && (
+            <div
+              className=
+              onClick={(e) => {
+                e.stopPropagation();
+                void onChange?.(undefined);
+              }}
+            >
+              <div className=>
+                <X
+                  className=
+                  width={16}
+                  height={16}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+        {}
+        <div className=>{errorMessage}</div>
+      </div>
+    );
+  },
+);
+SingleImageDropzone.displayName = ;
+const Button = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => {
+  return (
+    <button
+      className={twMerge(
+        
+        ,
+        
+        ,
+        
+        ,
+        className,
+      )}
+      ref={ref}
+      {...props}
+    />
+  );
+});
+Button.displayName = ;
+function formatFileSize(bytes?: number) {
+  if (!bytes) {
+    return ;
+  }
+  bytes = Number(bytes);
+  if (bytes === 0) {
+    return ;
+  }
+  const k = 1024;
+  const dm = 2;
+  const sizes = [, , , , , , , , ];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+}
+export { SingleImageDropzone };
+// components\spinner.tsx
+import { Loader } from ;
+import { cva, type VariantProps } from ;
+import { cn } from ;
+const spinnerVariants = cva(
+  ,
+  {
+    variants: {
+      size: {
+        default: ,
+        sm: ,
+        lg: ,
+        icon: 
+      }
+    },
+    defaultVariants: {
+      size: ,
+    },
+  },
+);
+interface SpinnerProps extends VariantProps<typeof spinnerVariants> {}
+export const Spinner = ({
+  size,
+}: SpinnerProps) => {
+  return (
+    <Loader className={cn(spinnerVariants({ size }))} />
+  );
+};
+// components\toolbar.tsx
+;
+import { ElementRef, useRef, useState } from ;
+import { ImageIcon, Smile, X } from ;
+import { useMutation } from ;
+import TextareaAutosize from ;
+import { useCoverImage } from ;
+import { Doc } from ;
+import { Button } from ;
+import { api } from ;
+import { IconPicker } from ;
+interface ToolbarProps {
+  initialData: Doc<>;
+  preview?: boolean;
+};
+export const Toolbar = ({
+  initialData,
+  preview
+}: ToolbarProps) => {
+  const inputRef = useRef<ElementRef<>>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [value, setValue] = useState(initialData.title);
+  const update = useMutation(api.documents.update);
+  const removeIcon = useMutation(api.documents.removeIcon);
+  const coverImage = useCoverImage();
+  const enableInput = () => {
+    if (preview) return;
+    setIsEditing(true);
+    setTimeout(() => {
+      setValue(initialData.title);
+      inputRef.current?.focus();
+    }, 0);
+  };
+  const disableInput = () => setIsEditing(false);
+  const onInput = (value: string) => {
+    setValue(value);
+    update({
+      id: initialData._id,
+      title: value || 
+    });
+  };
+  const onKeyDown = (
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (event.key === ) {
+      event.preventDefault();
+      disableInput();
+    }
+  };
+  const onIconSelect = (icon: string) => {
+    update({
+      id: initialData._id,
+      icon,
+    });
+  };
+  const onRemoveIcon = () => {
+    removeIcon({
+      id: initialData._id
+    })
+  }
+  return (
+    <div className=>
+      {!!initialData.icon && !preview && (
+        <div className=>
+          <IconPicker onChange={onIconSelect}>
+            <p className=>
+              {initialData.icon}
+            </p>
+          </IconPicker>
+          <Button
+            onClick={onRemoveIcon}
+            className=
+            variant=
+            size=
+          >
+            <X className= />
+          </Button>
+        </div>
+      )}
+      {!!initialData.icon && preview && (
+        <p className=>
+          {initialData.icon}
+        </p>
+      )}
+      <div className=>
+        {!initialData.icon && !preview && (
+          <IconPicker asChild onChange={onIconSelect}>
+            <Button
+              className=
+              variant=
+              size=
+            >
+              <Smile className= />
+              Add icon
+            </Button>
+          </IconPicker>
+        )}
+        {!initialData.coverImage && !preview && (
+          <Button
+            onClick={coverImage.onOpen}
+            className=
+            variant=
+            size=
+          >
+            <ImageIcon className= />
+            Add cover
+          </Button>
+        )}
+      </div>
+      {isEditing && !preview ? (
+        <TextareaAutosize
+          ref={inputRef}
+          onBlur={disableInput}
+          onKeyDown={onKeyDown}
+          value={value}
+          onChange={(e) => onInput(e.target.value)}
+          className=
+        />
+      ) : (
+        <div
+          onClick={enableInput}
+          className=
+        >
+          {initialData.title}
+        </div>
+      )}
+    </div>
+  )
+}
+// components\modals\confirm-modal.tsx
+;
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from ;
+interface ConfirmModalProps {
+  children: React.ReactNode;
+  onConfirm: () => void;
+};
+export const ConfirmModal = ({
+  children,
+  onConfirm
+}: ConfirmModalProps) => {
+  const handleConfirm = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    onConfirm();
+  };
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger onClick={(e) => e.stopPropagation()} asChild>
+        {children}
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Are you absolutely sure?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={e => e.stopPropagation()}>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction onClick={handleConfirm}>
+            Confirm
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+// components\modals\cover-image-modal.tsx
+;
+import { useState } from ;
+import { useMutation } from ;
+import { useParams } from ;
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader
+} from ;
+import { useCoverImage } from ;
+import { SingleImageDropzone } from ;
+import { useEdgeStore } from ;
+import { api } from ;
+import { Id } from ;
+export const CoverImageModal = () => {
+  const params = useParams();
+  const update = useMutation(api.documents.update);
+  const coverImage = useCoverImage();
+  const { edgestore } = useEdgeStore();
+  
+  const [file, setFile] = useState<File>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const onClose = () => {
+    setFile(undefined);
+    setIsSubmitting(false);
+    coverImage.onClose();
+  }
+  const onChange = async (file?: File) => {
+    if (file) {
+      setIsSubmitting(true);
+      setFile(file);
+      const res = await edgestore.publicFiles.upload({
+        file,
+        options: {
+          replaceTargetUrl: coverImage.url
+        }
+      });
+      await update({
+        id: params.documentId as Id<>,
+        coverImage: res.url
+      });
+      onClose();
+    }
+  }
+  return (
+    <Dialog open={coverImage.isOpen} onOpenChange={coverImage.onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <h2 className=>
+            Cover Image
+          </h2>
+        </DialogHeader>
+        <SingleImageDropzone
+          className=
+          disabled={isSubmitting}
+          value={file}
+          onChange={onChange}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+};
+// components\modals\document-properties-modal.tsx
+import { useState, useEffect } from ;
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from ;
+import { useMutation, useQuery } from ;
+import { api } from ;
+import { Button, Input, Label } from ;
+import axios from ;
+interface DocumentPropertiesModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  documentId: string;
+}
+export const DocumentPropertiesModal = ({ isOpen, onClose, documentId }: DocumentPropertiesModalProps) => {
+  const [document, setDocument] = useState(null);
+  const [title, setTitle] = useState();
+  const [permissions, setPermissions] = useState([]);
+  useEffect(() => {
+    if (isOpen) {
+      const fetchDocument = async () => {
+        const response = await axios.get(`/api/documents/${documentId}`);
+        setDocument(response.data);
+        setTitle(response.data.title);
+        setPermissions(response.data.permissions || []);
+      };
+      fetchDocument();
+    }
+  }, [isOpen, documentId]);
+  const updateDocument = useMutation(api.documents.update);
+  const handleSave = async () => {
+    await updateDocument({ id: documentId, title });
+    onClose();
+  };
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Document Properties</DialogTitle>
+          <DialogDescription>Update the properties of the document.</DialogDescription>
+        </DialogHeader>
+        <div>
+          <Label htmlFor=>Title</Label>
+          <Input id= value={title} onChange={(e) => setTitle(e.target.value)} />
+        </div>
+        <div>
+          <Label>Permissions</Label>
+          <ul>
+            {permissions.map((permission) => (
+              <li key={permission.userId}>{permission.displayName}: {permission.permission}</li>
+            ))}
+          </ul>
+        </div>
+        <Button onClick={handleSave}>Save</Button>
+      </DialogContent>
+    </Dialog>
+  );
+};
+// components\modals\permissions-modal.tsx
+;
+import { useState, useEffect } from ;
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from ;
+import { UserProfile, Workspace } from ; 
+import { Id } from ; 
+import axios from ;
+import { DocumentList } from ; 
+interface PermissionsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  workspaceId: Id<>; 
+}
+export const PermissionsModal = ({ isOpen, onClose, workspaceId }: PermissionsModalProps) => {
+  const [profiles, setProfiles] = useState<UserProfile[]>([]);
+  const [workspace, setWorkspace] = useState<Workspace | null>(null);
+  useEffect(() => {
+    const fetchWorkspace = async () => {
+      try {
+        const response = await axios.get(`/api/workspaces/${workspaceId}`);
+        setWorkspace(response.data);
+      } catch (error) {
+        console.error(, error);
+      }
+    };
+    const fetchUserProfiles = async () => {
+      try {
+        const response = await axios.get();
+        setProfiles(response.data);
+      } catch (error) {
+        console.error(, error);
+      }
+    };
+    if (isOpen) {
+      fetchWorkspace();
+      fetchUserProfiles();
+    }
+  }, [isOpen, workspaceId]);
+  const handlePermissionChange = async (userId: string, permission: string) => {
+    try {
+      await axios.post(, {
+        workspaceId,
+        userId,
+        permission,
+      });
+      const response = await axios.get(`/api/workspaces/${workspaceId}`);
+      setWorkspace(response.data);
+    } catch (error) {
+      console.error(, error);
+    }
+  };
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Manage Permissions</DialogTitle>
+          <DialogDescription>Manage permissions for the selected workspace.</DialogDescription>
+        </DialogHeader>
+        {workspace && (
+          <div>
+            <h3>Workspace: {workspace.name}</h3>
+            <div>
+              {profiles.map((profile) => (
+                <div key={profile.userId} className=>
+                  <span>{profile.displayName}</span>
+                  <select
+                    title=
+                    value={workspace.members.find((member) => member.userId === profile.userId)?.permission || }
+                    onChange={(e) => handlePermissionChange(profile.userId, e.target.value)}
+                  >
+                    <option value=>None</option>
+                    <option value=>Read</option>
+                    <option value=>Write</option>
+                    <option value=>Admin</option>
+                  </select>
+                </div>
+              ))}
+            </div>
+            <div>
+              <h4>Reassign Document Parent</h4>
+              <DocumentList parentDocumentId={workspace.id as Id<>} /> {}
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
+// components\modals\settings-modal.tsx
+;
+import { useEffect, useState } from ;
+import { Dialog, DialogContent, DialogHeader } from ;
+import { useSettings } from ;
+import { Label } from ;
+import { ModeToggle } from ;
+import { Workspace, UserProfile } from ;
+import axios from ;
+const WorkspaceItem = ({ workspace }: { workspace: Workspace }) => (
+  <div className=>
+    <Label>{workspace.name}</Label>
+    <span className=>
+      Owner: {workspace.ownerId}
+    </span>
+  </div>
+);
+export const SettingsModal = () => {
+  const settings = useSettings();
+  const [profiles, setProfiles] = useState<UserProfile[]>([]);
+  const [newWorkspaceName, setNewWorkspaceName] = useState();
+  useEffect(() => {
+    const updatedProfiles = settings.userProfiles.map((profile: UserProfile) => ({
+      ...profile,
+      displayName: profile.displayName || ,
+    }));
+    setProfiles(updatedProfiles);
+  }, [settings.userProfiles]);
+  const addWorkspace = async () => {
+    try {
+      await axios.post(, {
+        name: newWorkspaceName,
+        ownerId: , 
+      });
+      settings.fetchWorkspaces();
+      setNewWorkspaceName();
+    } catch (error) {
+      console.error(, error);
+    }
+  };
+  return (
+    <Dialog open={settings.isOpen} onOpenChange={settings.onClose}>
+      <DialogContent>
+        <DialogHeader className=>
+          <h2 className=>My settings</h2>
+        </DialogHeader>
+        <div className=>
+          <div className=>
+            <Label>Appearance</Label>
+            <span className=>
+              Customize how Jotion looks on your device
+            </span>
+          </div>
+          <ModeToggle />
+        </div>
+        <div className=>
+          <h3 className=>Workspaces</h3>
+          {settings.workspaces.map((workspace) => (
+            <WorkspaceItem key={workspace.id} workspace={workspace} />
+          ))}
+          <div className=>
+            <input
+              type=
+              value={newWorkspaceName}
+              onChange={(e) => setNewWorkspaceName(e.target.value)}
+              placeholder=
+              className=
+            />
+            <button onClick={addWorkspace} className=>
+              Add
+            </button>
+          </div>
+        </div>
+        <div className=>
+          <h3 className=>User Profiles</h3>
+          {profiles.map((profile) => (
+            <div key={profile._id} className=>
+              <Label>{profile.displayName}</Label>
+              <span className=>
+                Email: {profile.email}
+              </span>
+            </div>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+// components\modals\_components\permissions.tsx
+;
+import * as React from ;
+import { User } from ;
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem } from ;
+interface UserProfile {
+  userId: string;
+  displayName: string;
+  permission?: string; 
+}
+type OnPermissionChange = (userId: string, permission: string) => void;
+interface PermissionsControlProps {
+  userProfiles: UserProfile[];
+  permissions: string[];
+  onPermissionChange: OnPermissionChange;
+}
+export default function PermissionsControl({ userProfiles, permissions, onPermissionChange }: PermissionsControlProps) {
+ 
+  return (
+    <div className=>
+      {userProfiles.map((user) => (
+        <div key={user.userId} className=>
+          <span className=>{user.displayName}</span>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className=>
+                <User className= />
+                {user.permission || }
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align= className=>
+              {permissions.map((perm) => (
+                <DropdownMenuItem key={perm} onSelect={() => onPermissionChange(user.userId, perm)}>
+                  {perm}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      ))}
+    </div>
+  );
+}
+// components\providers\convex-provider.tsx
+;
+import { ReactNode } from ;
+import { ConvexReactClient } from ;
+import { ConvexProviderWithClerk } from ;
+import { ClerkProvider, useAuth } from ;
+const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+export const ConvexClientProvider = ({
+  children
+}: {
+  children: ReactNode;
+}) => {
+  return (
+    <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!}
+    >
+      <ConvexProviderWithClerk
+        useAuth={useAuth}
+        client={convex}
+      >
+        {children}
+      </ConvexProviderWithClerk>
+    </ClerkProvider>
+  );
+};
+// components\providers\modal-provider.tsx
+;
+import { useEffect, useState } from ;
+import { SettingsModal } from ;
+import { CoverImageModal } from ;
+export const ModalProvider = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) {
+    return null;
+  }
+  
+  return (
+    <>
+      <SettingsModal />
+      <CoverImageModal />
+    </>
+  );
+};
+// components\providers\theme-provider.tsx
+import * as React from 
+import { ThemeProvider as NextThemesProvider } from 
+import { type ThemeProviderProps } from 
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+}
+// components\ui\alert-dialog.tsx
+import * as React from 
+import * as AlertDialogPrimitive from 
+import { cn } from 
+import { buttonVariants } from 
+const AlertDialog = AlertDialogPrimitive.Root
+const AlertDialogTrigger = AlertDialogPrimitive.Trigger
+const AlertDialogPortal = AlertDialogPrimitive.Portal
+const AlertDialogOverlay = React.forwardRef<
+  React.ElementRef<typeof AlertDialogPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
+>(({ className, children, ...props }, ref) => (
+  <AlertDialogPrimitive.Overlay
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+    ref={ref}
+  />
+))
+AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName
+const AlertDialogContent = React.forwardRef<
+  React.ElementRef<typeof AlertDialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
+>(({ className, ...props }, ref) => (
+  <AlertDialogPortal>
+    <AlertDialogOverlay />
+    <AlertDialogPrimitive.Content
+      ref={ref}
+      className={cn(
+        ,
+        className
+      )}
+      {...props}
+    />
+  </AlertDialogPortal>
+))
+AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName
+const AlertDialogHeader = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+)
+AlertDialogHeader.displayName = 
+const AlertDialogFooter = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+)
+AlertDialogFooter.displayName = 
+const AlertDialogTitle = React.forwardRef<
+  React.ElementRef<typeof AlertDialogPrimitive.Title>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Title
+    ref={ref}
+    className={cn(, className)}
+    {...props}
+  />
+))
+AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName
+const AlertDialogDescription = React.forwardRef<
+  React.ElementRef<typeof AlertDialogPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Description
+    ref={ref}
+    className={cn(, className)}
+    {...props}
+  />
+))
+AlertDialogDescription.displayName =
+  AlertDialogPrimitive.Description.displayName
+const AlertDialogAction = React.forwardRef<
+  React.ElementRef<typeof AlertDialogPrimitive.Action>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>
+>(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Action
+    ref={ref}
+    className={cn(buttonVariants(), className)}
+    {...props}
+  />
+))
+AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
+const AlertDialogCancel = React.forwardRef<
+  React.ElementRef<typeof AlertDialogPrimitive.Cancel>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>
+>(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Cancel
+    ref={ref}
+    className={cn(
+      buttonVariants({ variant:  }),
+      ,
+      className
+    )}
+    {...props}
+  />
+))
+AlertDialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName
+export {
+  AlertDialog,
+  AlertDialogPortal,
+  AlertDialogOverlay,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+}
+// components\ui\avatar.tsx
+import * as React from 
+import * as AvatarPrimitive from 
+import { cn } from 
+const Avatar = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <AvatarPrimitive.Root
+    ref={ref}
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+))
+Avatar.displayName = AvatarPrimitive.Root.displayName
+const AvatarImage = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Image>,
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
+>(({ className, ...props }, ref) => (
+  <AvatarPrimitive.Image
+    ref={ref}
+    className={cn(, className)}
+    {...props}
+  />
+))
+AvatarImage.displayName = AvatarPrimitive.Image.displayName
+const AvatarFallback = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Fallback>,
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
+>(({ className, ...props }, ref) => (
+  <AvatarPrimitive.Fallback
+    ref={ref}
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+))
+AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
+export { Avatar, AvatarImage, AvatarFallback }
+// components\ui\button.tsx
+import * as React from 
+import { Slot } from 
+import { cva, type VariantProps } from 
+import { cn } from 
+const buttonVariants = cva(
+  ,
+  {
+    variants: {
+      variant: {
+        default: ,
+        destructive:
+          ,
+        outline:
+          ,
+        secondary:
+          ,
+        ghost: ,
+        link: ,
+      },
+      size: {
+        default: ,
+        sm: ,
+        lg: ,
+        icon: ,
+      },
+    },
+    defaultVariants: {
+      variant: ,
+      size: ,
+    },
+  }
+)
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+}
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = 
+export { Button, buttonVariants }
+// components\ui\command.tsx
+import * as React from 
+import { DialogProps } from 
+import { Command as CommandPrimitive } from 
+import { Search } from 
+import { cn } from 
+import { Dialog, DialogContent } from 
+const Command = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive>
+>(({ className, ...props }, ref) => (
+  <CommandPrimitive
+    ref={ref}
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+))
+Command.displayName = CommandPrimitive.displayName
+interface CommandDialogProps extends DialogProps {}
+const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
+  return (
+    <Dialog {...props}>
+      <DialogContent className=>
+        <Command className=>
+          {children}
+        </Command>
+      </DialogContent>
+    </Dialog>
+  )
+}
+const CommandInput = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Input>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
+>(({ className, ...props }, ref) => (
+  <div className= cmdk-input-wrapper=>
+    <Search className= />
+    <CommandPrimitive.Input
+      ref={ref}
+      className={cn(
+        ,
+        className
+      )}
+      {...props}
+    />
+  </div>
+))
+CommandInput.displayName = CommandPrimitive.Input.displayName
+const CommandList = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.List>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.List>
+>(({ className, ...props }, ref) => (
+  <CommandPrimitive.List
+    ref={ref}
+    className={cn(, className)}
+    {...props}
+  />
+))
+CommandList.displayName = CommandPrimitive.List.displayName
+const CommandEmpty = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Empty>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Empty>
+>((props, ref) => (
+  <CommandPrimitive.Empty
+    ref={ref}
+    className=
+    {...props}
+  />
+))
+CommandEmpty.displayName = CommandPrimitive.Empty.displayName
+const CommandGroup = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Group>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Group>
+>(({ className, ...props }, ref) => (
+  <CommandPrimitive.Group
+    ref={ref}
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+))
+CommandGroup.displayName = CommandPrimitive.Group.displayName
+const CommandSeparator = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Separator>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator>
+>(({ className, ...props }, ref) => (
+  <CommandPrimitive.Separator
+    ref={ref}
+    className={cn(, className)}
+    {...props}
+  />
+))
+CommandSeparator.displayName = CommandPrimitive.Separator.displayName
+const CommandItem = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
+>(({ className, ...props }, ref) => (
+  <CommandPrimitive.Item
+    ref={ref}
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+))
+CommandItem.displayName = CommandPrimitive.Item.displayName
+const CommandShortcut = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLSpanElement>) => {
+  return (
+    <span
+      className={cn(
+        ,
+        className
+      )}
+      {...props}
+    />
+  )
+}
+CommandShortcut.displayName = 
+export {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  CommandSeparator,
+}
+// components\ui\dialog.tsx
+import * as React from 
+import * as DialogPrimitive from 
+import { X } from 
+import { cn } from 
+const Dialog = DialogPrimitive.Root
+const DialogTrigger = DialogPrimitive.Trigger
+const DialogPortal = DialogPrimitive.Portal
+const DialogOverlay = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Overlay
+    ref={ref}
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+))
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
+const DialogContent = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn(
+        ,
+        className
+      )}
+      {...props}
+    >
+      {children}
+      <DialogPrimitive.Close className=>
+        <X className= />
+        <span className=>Close</span>
+      </DialogPrimitive.Close>
+    </DialogPrimitive.Content>
+  </DialogPortal>
+))
+DialogContent.displayName = DialogPrimitive.Content.displayName
+const DialogHeader = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+)
+DialogHeader.displayName = 
+const DialogFooter = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+)
+DialogFooter.displayName = 
+const DialogTitle = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Title>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Title
+    ref={ref}
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+))
+DialogTitle.displayName = DialogPrimitive.Title.displayName
+const DialogDescription = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Description
+    ref={ref}
+    className={cn(, className)}
+    {...props}
+  />
+))
+DialogDescription.displayName = DialogPrimitive.Description.displayName
+export {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+}
+// components\ui\dropdown-menu.tsx
+import * as React from 
+import * as DropdownMenuPrimitive from 
+import { Check, ChevronRight, Circle } from 
+import { cn } from 
+const DropdownMenu = DropdownMenuPrimitive.Root
+const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
+const DropdownMenuGroup = DropdownMenuPrimitive.Group
+const DropdownMenuPortal = DropdownMenuPrimitive.Portal
+const DropdownMenuSub = DropdownMenuPrimitive.Sub
+const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup
+const DropdownMenuSubTrigger = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {
+    inset?: boolean
+  }
+>(({ className, inset, children, ...props }, ref) => (
+  <DropdownMenuPrimitive.SubTrigger
+    ref={ref}
+    className={cn(
+      ,
+      inset && ,
+      className
+    )}
+    {...props}
+  >
+    {children}
+    <ChevronRight className= />
+  </DropdownMenuPrimitive.SubTrigger>
+))
+DropdownMenuSubTrigger.displayName =
+  DropdownMenuPrimitive.SubTrigger.displayName
+const DropdownMenuSubContent = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
+>(({ className, ...props }, ref) => (
+  <DropdownMenuPrimitive.SubContent
+    ref={ref}
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  />
+))
+DropdownMenuSubContent.displayName =
+  DropdownMenuPrimitive.SubContent.displayName
+const DropdownMenuContent = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
+>(({ className, sideOffset = 4, ...props }, ref) => (
+  <DropdownMenuPrimitive.Portal>
+    <DropdownMenuPrimitive.Content
+      ref={ref}
+      sideOffset={sideOffset}
+      className={cn(
+        ,
+        className
+      )}
+      {...props}
+    />
+  </DropdownMenuPrimitive.Portal>
+))
+DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName
+const DropdownMenuItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
+    inset?: boolean
+  }
+>(({ className, inset, ...props }, ref) => (
+  <DropdownMenuPrimitive.Item
+    ref={ref}
+    className={cn(
+      ,
+      inset && ,
+      className
+    )}
+    {...props}
+  />
+))
+DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName
+const DropdownMenuCheckboxItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
+>(({ className, children, checked, ...props }, ref) => (
+  <DropdownMenuPrimitive.CheckboxItem
+    ref={ref}
+    className={cn(
+      ,
+      className
+    )}
+    checked={checked}
+    {...props}
+  >
+    <span className=>
+      <DropdownMenuPrimitive.ItemIndicator>
+        <Check className= />
+      </DropdownMenuPrimitive.ItemIndicator>
+    </span>
+    {children}
+  </DropdownMenuPrimitive.CheckboxItem>
+))
+DropdownMenuCheckboxItem.displayName =
+  DropdownMenuPrimitive.CheckboxItem.displayName
+const DropdownMenuRadioItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
+>(({ className, children, ...props }, ref) => (
+  <DropdownMenuPrimitive.RadioItem
+    ref={ref}
+    className={cn(
+      ,
+      className
+    )}
+    {...props}
+  >
+    <span className=>
+      <DropdownMenuPrimitive.ItemIndicator>
+        <Circle className= />
+      </DropdownMenuPrimitive.ItemIndicator>
+    </span>
+    {children}
+  </DropdownMenuPrimitive.RadioItem>
+))
+DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName
+const DropdownMenuLabel = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Label>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
+    inset?: boolean
+  }
+>(({ className, inset, ...props }, ref) => (
+  <DropdownMenuPrimitive.Label
+    ref={ref}
+    className={cn(
+      ,
+      inset && ,
+      className
+    )}
+    {...props}
+  />
+))
+DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName
+const DropdownMenuSeparator = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
+>(({ className, ...props }, ref) => (
+  <DropdownMenuPrimitive.Separator
+    ref={ref}
+    className={cn(, className)}
+    {...props}
+  />
+))
+DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName
+const DropdownMenuShortcut = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLSpanElement>) => {
+  return (
+    <span
+      className={cn(, className)}
+      {...props}
+    />
+  )
+}
+DropdownMenuShortcut.displayName = 
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuRadioGroup,
+}
+// components\ui\input.tsx
+import * as React from 
+import { cn } from 
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, ...props }, ref) => {
+    return (
+      <input
+        type={type}
+        className={cn(
+          ,
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Input.displayName = 
+export { Input }
+// components\ui\label.tsx
+import * as React from 
+import * as LabelPrimitive from 
+import { cva, type VariantProps } from 
+import { cn } from 
+const labelVariants = cva(
+  
+)
+const Label = React.forwardRef<
+  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
+    VariantProps<typeof labelVariants>
+>(({ className, ...props }, ref) => (
+  <LabelPrimitive.Root
+    ref={ref}
+    className={cn(labelVariants(), className)}
+    {...props}
+  />
+))
+Label.displayName = LabelPrimitive.Root.displayName
+export { Label }
+// components\ui\popover.tsx
+import * as React from 
+import * as PopoverPrimitive from 
+import { cn } from 
+const Popover = PopoverPrimitive.Root
+const PopoverTrigger = PopoverPrimitive.Trigger
+const PopoverContent = React.forwardRef<
+  React.ElementRef<typeof PopoverPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
+>(({ className, align = , sideOffset = 4, ...props }, ref) => (
+  <PopoverPrimitive.Portal>
+    <PopoverPrimitive.Content
+      ref={ref}
+      align={align}
+      sideOffset={sideOffset}
+      className={cn(
+        ,
+        className
+      )}
+      {...props}
+    />
+  </PopoverPrimitive.Portal>
+))
+PopoverContent.displayName = PopoverPrimitive.Content.displayName
+export { Popover, PopoverTrigger, PopoverContent }
+// components\ui\scroll-area.tsx
+import * as React from 
+import * as ScrollAreaPrimitive from 
+import { cn } from 
+const ScrollArea = React.forwardRef<
+  React.ElementRef<typeof ScrollAreaPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>
+>(({ className, children, ...props }, ref) => (
+  <ScrollAreaPrimitive.Root
+    ref={ref}
+    className={cn(, className)}
+    {...props}
+  >
+    <ScrollAreaPrimitive.Viewport className=>
+      {children}
+    </ScrollAreaPrimitive.Viewport>
+    <ScrollBar />
+    <ScrollAreaPrimitive.Corner />
+  </ScrollAreaPrimitive.Root>
+))
+ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName
+const ScrollBar = React.forwardRef<
+  React.ElementRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
+  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>
+>(({ className, orientation = , ...props }, ref) => (
+  <ScrollAreaPrimitive.ScrollAreaScrollbar
+    ref={ref}
+    orientation={orientation}
+    className={cn(
+      ,
+      orientation ===  &&
+        ,
+      orientation ===  &&
+        ,
+      className
+    )}
+    {...props}
+  >
+    <ScrollAreaPrimitive.ScrollAreaThumb className= />
+  </ScrollAreaPrimitive.ScrollAreaScrollbar>
+))
+ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName
+export { ScrollArea, ScrollBar }
+// components\ui\skeleton.tsx
+import { cn } from 
+function Skeleton({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn(, className)}
+      {...props}
+    />
+  )
+}
+export { Skeleton }
+// convex\auth.config.js
+export default {
+    providers: [
+      {
+        domain: ,
+        applicationID: ,
+      },
+    ]
+  };
+// convex\documents.ts
+import { v } from ;
+import { mutation, query } from ;
+import { Doc, Id } from ;
+export const archive = mutation({
+  args: { id: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const existingDocument = await ctx.db.get(args.id);
+    if (!existingDocument) {
+      throw new Error();
+    }
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+    const recursiveArchive = async (documentId: Id<>) => {
+      const children = await ctx.db
+        .query()
+        .withIndex(, (q) => (
+          q
+            .eq(, userId)
+            .eq(, documentId)
+        ))
+        .collect();
+      for (const child of children) {
+        await ctx.db.patch(child._id, {
+          isArchived: true,
+        });
+        await recursiveArchive(child._id);
+      }
+    }
+    const document = await ctx.db.patch(args.id, {
+      isArchived: true,
+    });
+    await recursiveArchive(args.id);
+    return document;
+  }
+})
+export const getSidebar = query({
+  args: {
+    parentDocument: v.optional(v.id())
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const documents = await ctx.db
+      .query()
+      .withIndex(, (q) =>
+        q
+          .eq(, userId)
+          .eq(, args.parentDocument)
+      )
+      .filter((q) =>
+        q.eq(q.field(), false)
+      )
+      .order()
+      .collect();
+    return documents;
+  },
+});
+export const create = mutation({
+  args: {
+    title: v.string(),
+    parentDocument: v.optional(v.id()),
+    workspaceId: v.optional(v.id()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const document = await ctx.db.insert(, {
+      title: args.title,
+      parentDocument: args.parentDocument,
+      userId,
+      workspaceId: args.workspaceId,
+      isArchived: false,
+      isPublished: false,
+    });
+    return document;
+  }
+});
+export const getTrash = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const documents = await ctx.db
+      .query()
+      .withIndex(, (q) => q.eq(, userId))
+      .filter((q) =>
+        q.eq(q.field(), true),
+      )
+      .order()
+      .collect();
+    return documents;
+  }
+});
+export const restore = mutation({
+  args: { id: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const existingDocument = await ctx.db.get(args.id);
+    if (!existingDocument) {
+      throw new Error();
+    }
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+    const recursiveRestore = async (documentId: Id<>) => {
+      const children = await ctx.db
+        .query()
+        .withIndex(, (q) => (
+          q
+            .eq(, userId)
+            .eq(, documentId)
+        ))
+        .collect();
+      for (const child of children) {
+        await ctx.db.patch(child._id, {
+          isArchived: false,
+        });
+        await recursiveRestore(child._id);
+      }
+    }
+    const options: Partial<Doc<>> = {
+      isArchived: false,
+    };
+    if (existingDocument.parentDocument) {
+      const parent = await ctx.db.get(existingDocument.parentDocument);
+      if (parent?.isArchived) {
+        options.parentDocument = undefined;
+      }
+    }
+    const document = await ctx.db.patch(args.id, options);
+    await recursiveRestore(args.id);
+    return document;
+  }
+});
+export const remove = mutation({
+  args: { id: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const existingDocument = await ctx.db.get(args.id);
+    if (!existingDocument) {
+      throw new Error();
+    }
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+    const document = await ctx.db.delete(args.id);
+    return document;
+  }
+});
+export const getSearch = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const documents = await ctx.db
+      .query()
+      .withIndex(, (q) => q.eq(, userId))
+      .filter((q) =>
+        q.eq(q.field(), false),
+      )
+      .order()
+      .collect()
+    return documents;
+  }
+});
+export const getById = query({
+  args: { documentId: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    const document = await ctx.db.get(args.documentId);
+    if (!document) {
+      throw new Error();
+    }
+    if (document.isPublished && !document.isArchived) {
+      return document;
+    }
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    if (document.userId !== userId) {
+      throw new Error();
+    }
+    return document;
+  }
+});
+export const update = mutation({
+  args: {
+    id: v.id(),
+    title: v.optional(v.string()),
+    content: v.optional(v.string()),
+    coverImage: v.optional(v.string()),
+    icon: v.optional(v.string()),
+    isPublished: v.optional(v.boolean()),
+    parentDocument: v.optional(v.id()) 
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const { id, ...rest } = args;
+    const existingDocument = await ctx.db.get(args.id);
+    if (!existingDocument) {
+      throw new Error();
+    }
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+    const document = await ctx.db.patch(args.id, {
+      ...rest,
+    });
+    return document;
+  },
+});
+export const removeIcon = mutation({
+  args: { id: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const existingDocument = await ctx.db.get(args.id) as Doc<>;
+    if (!existingDocument) {
+      throw new Error();
+    }
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+    const document = await ctx.db.patch(args.id, {
+      icon: undefined,
+    });
+    return document;
+  },
+});
+export const removeCoverImage = mutation({
+  args: { id: v.id() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject;
+    const existingDocument = await ctx.db.get(args.id);
+    if (!existingDocument) {
+      throw new Error();
+    }
+    if (existingDocument.userId !== userId) {
+      throw new Error();
+    }
+    const document = await ctx.db.patch(args.id, {
+      coverImage: undefined,
+    });
+    return document;
+  }
+});
+// convex\permissions.ts
+export enum Permission {
+    Read = ,
+    ReadWrite = ,
+    Delete = ,
+  }
+// convex\README.md
+# Welcome to your Convex functions directory!
+Write your Convex functions here. See
+https://docs.convex.dev/using/writing-convex-functions for more.
+A query function that takes two arguments looks like:
+```ts
+// functions.js
+import { query } from "./_generated/server";
+import { v } from "convex/values";
+export const myQueryFunction = query({
+  // Validators for arguments.
+  args: {
+    first: v.number(),
+    second: v.string(),
+  },
+  // Function implementation.
+  handler: async (ctx, args) => {
+    // Read the database as many times as you need here.
+    // See https://docs.convex.dev/database/reading-data.
+    const documents = await ctx.db.query("tablename").collect();
+    // Arguments passed from the client are properties of the args object.
+    console.log(args.first, args.second);
+    // Write arbitrary JavaScript here: filter, aggregate, build derived data,
+    // remove non-public properties, or create new objects.
+    return documents;
+  },
+});
+```
+Using this query function in a React component looks like:
+```ts
+const data = useQuery(api.functions.myQueryFunction, {
+  first: 10,
+  second: "hello",
+});
+```
+A mutation function looks like:
+```ts
+// functions.js
+import { mutation } from "./_generated/server";
+import { v } from "convex/values";
+export const myMutationFunction = mutation({
+  // Validators for arguments.
+  args: {
+    first: v.string(),
+    second: v.string(),
+  },
+  // Function implementation.
+  handler: async (ctx, args) => {
+    // Insert or modify documents in the database here.
+    // Mutations can also read from the database like queries.
+    // See https://docs.convex.dev/database/writing-data.
+    const message = { body: args.first, author: args.second };
+    const id = await ctx.db.insert("messages", message);
+    // Optionally, return a value from your mutation.
+    return await ctx.db.get(id);
+  },
+});
+```
+Using this mutation function in a React component looks like:
+```ts
+const mutation = useMutation(api.functions.myMutationFunction);
+function handleButtonPress() {
+  // fire and forget, the most common way to use mutations
+  mutation({ first: "Hello!", second: "me" });
+  // OR
+  // use the result once the mutation has completed
+  mutation({ first: "Hello!", second: "me" }).then((result) =>
+    console.log(result)
+  );
+}
+```
+Use the Convex CLI to push your functions to a deployment. See everything
+the Convex CLI can do by running `npx convex -h` in your project root
+directory. To learn more, launch the docs with `npx convex docs`.
+// convex\schema.ts
+import { defineSchema, defineTable } from ;
+import { v } from ;
+export default defineSchema({
+  documents: defineTable({
+    title: v.string(),
+    userId: v.string(),
+    workspaceId: v.optional(v.id()),
+    sharedWith: v.optional(v.array(
+      v.object({
+        userId: v.string(),
+        permission: v.string(),
+      })
+    )),
+    isArchived: v.boolean(),
+    parentDocument: v.optional(v.id()),
+    content: v.optional(v.string()),
+    coverImage: v.optional(v.string()),
+    icon: v.optional(v.string()),
+    isPublished: v.boolean(),
+  })
+  .index(, [])
+  .index(, [])
+  .index(, [, ]),
+  workspaces: defineTable({
+    name: v.string(),
+    ownerId: v.optional(v.id()),
+    userId: v.string(),
+    icon: v.optional(v.string()), 
+    authorizedUsers: v.array(
+      v.object({
+        userId: v.string(),
+        permission: v.string(),
+      })
+    ),
+  }).index(, []),
+  userProfile: defineTable({
+    userId: v.string(),
+    avatar: v.optional(v.string()), 
+    displayName: v.optional(v.string()),
+    email: v.optional(v.string()),
+  }),
+  memberships: defineTable({
+    workspaceId: v.id(),
+    userId: v.id(),
+    role: v.union(
+      v.literal(),
+      v.literal(),
+      v.literal(),
+      v.literal()
+    ),
+  }).index(, []),
+  publicFiles: defineTable({
+    file: v.bytes(),
+    filename: v.string(),
+  }).index(, []),
+});
+// convex\tsconfig.json
+{
+  /* This TypeScript project config describes the environment that
+   * Convex functions run in and is used to typecheck them.
+   * You can modify it, but some settings required to use Convex.
+   */
+  "compilerOptions": {
+    /* These settings are not required by Convex and can be modified. */
+    "allowJs": true,
+    "strict": true,
+    /* These compiler options are required by Convex */
+    "target": "ESNext",
+    "lib": ["ES2021", "dom"],
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "include": ["./**/*"],
+  "exclude": ["./_generated"]
+}
+// convex\updateWorkspaces.ts
+import { mutation } from ;
+import { Id } from ;
+export const updateWorkspaces = mutation({
+  handler: async (ctx) => {
+    const workspaces = await ctx.db.query().collect();
+    for (const workspace of workspaces) {
+      const updates: Partial<{ ownerId: Id<> }> = {};
+      if (!workspace.ownerId) {
+        updates.ownerId = workspace.userId as Id<>; 
+      }
+      if (Object.keys(updates).length > 0) {
+        await ctx.db.patch(workspace._id, updates);
+      }
+    }
+  },
+});
+// convex\userprofile.ts
+import { v } from ;
+import { mutation, query } from ;
+import { Id } from ;
+export const upsertUserProfile = mutation({
+  args: {
+    clerkUserId: v.string(),
+    profileData: v.object({
+      avatar: v.optional(v.string()), 
+      displayName: v.optional(v.string()),
+      email: v.optional(v.string()),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const existingProfiles = await ctx.db
+      .query()
+      .filter((q) => q.eq(q.field(), args.clerkUserId))
+      .take(1);
+    const existingProfile = existingProfiles.length > 0 ? existingProfiles[0] : null;
+    if (existingProfile) {
+      const updatedProfile = { ...existingProfile, ...args.profileData };
+      return await ctx.db.replace(existingProfile._id, updatedProfile);
+    } else {
+      return await ctx.db.insert(, {
+        userId: args.clerkUserId,
+        ...args.profileData,
+      });
+    }
+  },
+});
+export const getUserProfile = query({
+  args: {
+    clerkUserId: v.string(),
+  },
+  async handler({ db }, { clerkUserId }) {
+    const existingProfiles = await db
+      .query()
+      .filter((q) => q.eq(q.field(), clerkUserId))
+      .take(1);
+    return existingProfiles.length > 0 ? existingProfiles[0] : null;
+  },
+});
+export const getAllUserProfiles = query(async ({ db }) => {
+  return await db.query().collect();
+});
+// convex\workspaces.ts
+import { v } from ;
+import { mutation, query } from ;
+import { Id } from ;
+type UserId = Id<>;
+export const getAll = query({
+  handler: async (ctx) => {
+    const workspaces = await ctx.db.query().collect();
+    return workspaces;
+  },
+});
+export const create = mutation({
+  args: {
+    name: v.string(),
+    ownerId: v.id(),
+    icon: v.optional(v.string()), 
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject as UserId;
+    const newWorkspace = await ctx.db.insert(, {
+      name: args.name,
+      ownerId: args.ownerId,
+      userId: args.ownerId,
+      icon: args.icon || , 
+      authorizedUsers: [{ userId: args.ownerId, permission:  }],
+    });
+    return newWorkspace;
+  }
+});
+export const updateWorkspacePermissions = mutation({
+  args: {
+    workspaceId: v.id(),
+    userId: v.id(),
+    permission: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const { workspaceId, userId, permission } = args;
+    
+    const workspace = await ctx.db.get(workspaceId);
+    if (!workspace) {
+      throw new Error();
+    }
+    
+    const updatedAuthorizedUsers = workspace.authorizedUsers.map((user) => {
+      if (user.userId === userId) {
+        return { ...user, permission };
+      }
+      return user;
+    });
+    
+    await ctx.db.replace(workspaceId, {
+      ...workspace,
+      authorizedUsers: updatedAuthorizedUsers,
+    });
+    return updatedAuthorizedUsers;
+  },
+});
+export const getWorkspace = query({
+  args: {
+    workspaceId: v.id(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.workspaceId);
+  },
+});
+export const getOrCreateUserWorkspace = mutation({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error();
+    }
+    const userId = identity.subject as UserId;
+    let workspace = await ctx.db
+      .query()
+      .withIndex(, (q) => q.eq(, userId))
+      .first();
+    
+    if (!workspace) {
+      const workspaceId = await ctx.db.insert(, {
+        name: ,
+        ownerId: userId,
+        userId,
+        icon: , 
+        authorizedUsers: [{ userId, permission:  }],
+      });
+      workspace = await ctx.db.get(workspaceId); 
+    }
+    if (!workspace) {
+      throw new Error();
+    }
+    return workspace;
+  },
+});
+// convex\_generated\api.d.ts
+import type {
+  ApiFromModules,
+  FilterApi,
+  FunctionReference,
+} from ;
+import type * as documents from ;
+import type * as permissions from ;
+import type * as updateWorkspaces from ;
+import type * as userprofile from ;
+import type * as workspaces from ;
+declare const fullApi: ApiFromModules<{
+  documents: typeof documents;
+  permissions: typeof permissions;
+  updateWorkspaces: typeof updateWorkspaces;
+  userprofile: typeof userprofile;
+  workspaces: typeof workspaces;
+}>;
+export declare const api: FilterApi<
+  typeof fullApi,
+  FunctionReference<any, >
+>;
+export declare const internal: FilterApi<
+  typeof fullApi,
+  FunctionReference<any, >
+>;
+// convex\_generated\api.js
+import { anyApi } from ;
+export const api = anyApi;
+export const internal = anyApi;
+// convex\_generated\dataModel.d.ts
+import type {
+  DataModelFromSchemaDefinition,
+  DocumentByName,
+  TableNamesInDataModel,
+  SystemTableNames,
+} from ;
+import type { GenericId } from ;
+import schema from ;
+export type TableNames = TableNamesInDataModel<DataModel>;
+export type Doc<TableName extends TableNames> = DocumentByName<
+  DataModel,
+  TableName
+>;
+export type Id<TableName extends TableNames | SystemTableNames> =
+  GenericId<TableName>;
+export type DataModel = DataModelFromSchemaDefinition<typeof schema>;
+// convex\_generated\server.d.ts
+import {
+  ActionBuilder,
+  HttpActionBuilder,
+  MutationBuilder,
+  QueryBuilder,
+  GenericActionCtx,
+  GenericMutationCtx,
+  GenericQueryCtx,
+  GenericDatabaseReader,
+  GenericDatabaseWriter,
+} from ;
+import type { DataModel } from ;
+export declare const query: QueryBuilder<DataModel, >;
+export declare const internalQuery: QueryBuilder<DataModel, >;
+export declare const mutation: MutationBuilder<DataModel, >;
+export declare const internalMutation: MutationBuilder<DataModel, >;
+export declare const action: ActionBuilder<DataModel, >;
+export declare const internalAction: ActionBuilder<DataModel, >;
+export declare const httpAction: HttpActionBuilder;
+export type QueryCtx = GenericQueryCtx<DataModel>;
+export type MutationCtx = GenericMutationCtx<DataModel>;
+export type ActionCtx = GenericActionCtx<DataModel>;
+export type DatabaseReader = GenericDatabaseReader<DataModel>;
+export type DatabaseWriter = GenericDatabaseWriter<DataModel>;
+// convex\_generated\server.js
+import {
+  actionGeneric,
+  httpActionGeneric,
+  queryGeneric,
+  mutationGeneric,
+  internalActionGeneric,
+  internalMutationGeneric,
+  internalQueryGeneric,
+} from ;
+export const query = queryGeneric;
+export const internalQuery = internalQueryGeneric;
+export const mutation = mutationGeneric;
+export const internalMutation = internalMutationGeneric;
+export const action = actionGeneric;
+export const internalAction = internalActionGeneric;
+export const httpAction = httpActionGeneric;
+// hooks\use-cover-image.tsx
+import { create } from ;
+type CoverImageStore = {
+  url?: string;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  onReplace: (url: string) => void;
+};
+export const useCoverImage = create<CoverImageStore>((set) => ({
+  url: undefined,
+  isOpen: false,
+  onOpen: () => set({ isOpen: true, url: undefined }),
+  onClose: () => set({ isOpen: false, url: undefined }),
+  onReplace: (url: string) => set({ isOpen: true, url })
+}));
+// hooks\use-origin.tsx
+import { useEffect, useState } from ;
+export const useOrigin = () => {
+  const [mounted, setMounted] = useState(false);
+  const origin = typeof window !==  && window.location.origin ? window.location.origin : ;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  if (!mounted) {
+    return ;
+  }
+  return origin;
+};
+// hooks\use-scroll-top.tsx
+import { useState, useEffect } from ;
+export const useScrollTop = (threshold = 10) => {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > threshold) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener(, handleScroll);
+    return () => window.removeEventListener(, handleScroll);
+  }, [threshold]);
+  return scrolled;
+}
+// hooks\use-search.tsx
+import { create } from ;
+type SearchStore = {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  toggle: () => void;
+};
+export const useSearch = create<SearchStore>((set, get) => ({
+  isOpen: false,
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false }),
+  toggle: () => set({ isOpen: !get().isOpen }),
+}));
+// hooks\use-settings.tsx
+import { useState, useEffect } from ;
+import axios from ;
+import { Workspace, UserProfile } from ;
+interface Settings {
+  isOpen: boolean;
+  onOpen: () => void; 
+  onClose: () => void;
+  workspaces: Workspace[];
+  userProfiles: UserProfile[];
+  fetchWorkspaces: () => void;
+  fetchUserProfiles: () => void;
+}
+export const useSettings = (): Settings => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
+  const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
+  const fetchWorkspaces = async () => {
+    try {
+      const response = await axios.get();
+      setWorkspaces(response.data);
+    } catch (error) {
+      console.error(, error);
+    }
+  };
+  const fetchUserProfiles = async () => {
+    try {
+      const response = await axios.get();
+      setUserProfiles(response.data);
+    } catch (error) {
+      console.error(, error);
+    }
+  };
+  useEffect(() => {
+    fetchWorkspaces();
+    fetchUserProfiles();
+  }, []);
+  const onOpen = () => setIsOpen(true); 
+  const onClose = () => setIsOpen(false);
+  return {
+    isOpen,
+    onOpen, 
+    onClose,
+    workspaces,
+    userProfiles,
+    fetchWorkspaces,
+    fetchUserProfiles,
+  };
+};
+// hooks\use-sync-user-profile.ts
+;
+import { useAuth } from ;
+import { useEffect } from ;
+export const useSyncUserProfile = () => {
+  const { userId } = useAuth();
+  useEffect(() => {
+    if (userId) {
+      fetch(, { method:  });
+    }
+  }, [userId]);
+};
+// lib\edgestore.ts
+;
+ 
+import { type EdgeStoreRouter } from ;
+import { createEdgeStoreProvider } from ;
+ 
+const { EdgeStoreProvider, useEdgeStore } =
+  createEdgeStoreProvider<EdgeStoreRouter>();
+ 
+export { EdgeStoreProvider, useEdgeStore };
+// lib\utils.ts
+import { type ClassValue, clsx } from 
+import { twMerge } from 
+ 
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+// types\types.ts
+export interface Permission {
+  id: string;
+  name: string;
+  level: number;
+}
+export interface UserProfile {
+  _id: string;
+  _creationTime: number;
+  avatar?: string;
+  displayName?: string; 
+  email?: string;
+  userId: string;
+  permission?: string; 
+}
+export interface Workspace {
+  id: string;
+  name: string;
+  ownerId: string;
+  members: UserProfile[];
+}

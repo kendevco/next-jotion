@@ -1,3 +1,5 @@
+// app/(main)/_components/navigation.tsx:
+
 "use client";
 
 import {
@@ -31,9 +33,18 @@ import { DocumentList } from "./document-list";
 import { TrashBox } from "./trash-box";
 import { Navbar } from "./navbar";
 
+import { PermissionsModal } from "@/components/modals/permissions-modal";
+
+import { Id } from "@/convex/_generated/dataModel"; // Import Id type
+
+type SettingsType = {
+  onOpen?: () => void;
+  // other properties
+};
+
 export const Navigation = () => {
   const router = useRouter();
-  const settings = useSettings();
+  const settings = useSettings() as SettingsType;
   const search = useSearch();
   const params = useParams();
   const pathname = usePathname();
@@ -45,6 +56,11 @@ export const Navigation = () => {
   const navbarRef = useRef<ElementRef<"div">>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
+
+  const [isPermissionsModalOpen, setPermissionsModalOpen] = useState(false);
+
+  const openPermissionsModal = () => setPermissionsModalOpen(true);
+  const closePermissionsModal = () => setPermissionsModalOpen(false);
 
   useEffect(() => {
     if (isMobile) {
@@ -119,11 +135,11 @@ export const Navigation = () => {
       navbarRef.current.style.setProperty("left", "0");
       setTimeout(() => setIsResetting(false), 300);
     }
-  }
+  };
 
   const handleCreate = () => {
     const promise = create({ title: "Untitled" })
-      .then((documentId) => router.push(`/documents/${documentId}`))
+      .then((documentId) => router.push(`/documents/${documentId}`));
 
     toast.promise(promise, {
       loading: "Creating a new note...",
@@ -131,6 +147,9 @@ export const Navigation = () => {
       error: "Failed to create a new note."
     });
   };
+
+  // Replace "yourWorkspaceId" with the actual workspace ID
+  const workspaceId: Id<"workspaces"> = "yourWorkspaceId" as Id<"workspaces">;
 
   return (
     <>
@@ -145,6 +164,7 @@ export const Navigation = () => {
         <div
           onClick={collapse}
           role="button"
+          title="Collapse Sidebar"
           className={cn(
             "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition",
             isMobile && "opacity-100"
@@ -169,6 +189,11 @@ export const Navigation = () => {
             onClick={handleCreate}
             label="New page"
             icon={PlusCircle}
+          />
+          <Item
+            label="Manage Permissions"
+            icon={Settings}
+            onClick={openPermissionsModal}
           />
         </div>
         <div className="mt-4">
@@ -215,6 +240,11 @@ export const Navigation = () => {
           </nav>
         )}
       </div>
+      <PermissionsModal
+        isOpen={isPermissionsModalOpen}
+        onClose={closePermissionsModal}
+        workspaceId={workspaceId} // Use the correctly typed workspace ID
+      />
     </>
-  )
-}
+  );
+};

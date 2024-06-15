@@ -10,18 +10,16 @@ import {
   PopoverTrigger,
   Popover,
   PopoverContent
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import { useOrigin } from "@/hooks/use-origin";
 import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 
 interface PublishProps {
-  initialData: Doc<"documents">
-};
+  initialData: Doc<"documents">;
+}
 
-export const Publish = ({
-  initialData
-}: PublishProps) => {
+export const Publish = ({ initialData }: PublishProps) => {
   const origin = useOrigin();
   const update = useMutation(api.documents.update);
 
@@ -36,8 +34,7 @@ export const Publish = ({
     const promise = update({
       id: initialData._id,
       isPublished: true,
-    })
-      .finally(() => setIsSubmitting(false));
+    }).finally(() => setIsSubmitting(false));
 
     toast.promise(promise, {
       loading: "Publishing...",
@@ -52,8 +49,7 @@ export const Publish = ({
     const promise = update({
       id: initialData._id,
       isPublished: false,
-    })
-      .finally(() => setIsSubmitting(false));
+    }).finally(() => setIsSubmitting(false));
 
     toast.promise(promise, {
       loading: "Unpublishing...",
@@ -69,22 +65,20 @@ export const Publish = ({
     setTimeout(() => {
       setCopied(false);
     }, 1000);
-  }
+  };
 
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button size="sm" variant="ghost">
-          Publish 
+          Publish
           {initialData.isPublished && (
-            <Globe
-              className="text-sky-500 w-4 h-4 ml-2"
-            />
+            <Globe className="text-sky-500 w-4 h-4 ml-2" />
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent 
-        className="w-72" 
+      <PopoverContent
+        className="w-72"
         align="end"
         alignOffset={8}
         forceMount
@@ -98,10 +92,11 @@ export const Publish = ({
               </p>
             </div>
             <div className="flex items-center">
-              <input 
+              <input
                 className="flex-1 px-2 text-xs border rounded-l-md h-8 bg-muted truncate"
                 value={url}
                 disabled
+                title="URL of the published note"
               />
               <Button
                 onClick={onCopy}
@@ -147,5 +142,5 @@ export const Publish = ({
         )}
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};
