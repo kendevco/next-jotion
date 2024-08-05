@@ -1,11 +1,10 @@
-// app\(public)\(routes)\preview\[documentId]\page.tsx
+// app/(public)/(routes)/preview/[documentId]/page.tsx
 "use client";
 
 import { useMutation, useQuery } from "convex/react";
 import dynamic from "next/dynamic";
 import { useMemo, useEffect, useState } from "react";
 import Head from "next/head";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 import { api } from "@/convex/_generated/api";
@@ -14,6 +13,7 @@ import { Toolbar } from "@/components/toolbar";
 import { Cover } from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDocumentTitle } from "@hooks/use-document-title";
+import { Document } from "@/types/types"; // Import the Document interface here
 
 interface DocumentIdPageProps {
   params: {
@@ -36,7 +36,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   });
 
   // Set the document title using a custom hook
-  useDocumentTitle(document, "KenDev Shared Document - ");
+  useDocumentTitle(document || undefined, "KenDev Shared Document - ");
 
   // Mutation hook to update the document
   const update = useMutation(api.documents.update);
@@ -110,19 +110,8 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
         <meta property="twitter:image" content={imageUrl} />
       </Head>
       <div className="pb-40">
-        {document.coverImage ? (
+        {document.coverImage && ( // Only render the Cover component if there's a cover image
           <Cover preview url={document.coverImage} />
-        ) : (
-          <div className="relative w-full h-[200px]">
-            <Image
-              src={defaultImage}
-              alt="Default Document Image"
-              layout="fill"
-              objectFit="contain"
-              className="object-contain dark:hidden"
-              priority
-            />
-          </div>
         )}
         <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
           <Toolbar preview initialData={document} />

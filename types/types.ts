@@ -24,12 +24,18 @@ export interface Workspace {
 }
 
 // types.ts
+import { Id } from "@/convex/_generated/dataModel";
 export interface Document {
+  _id: Id<"documents">;
+  _creationTime: number; // Convex typically provides this automatically
   title: string;
-  coverImage?: string;
-  content?: string;
   userId: string;
+  workspaceId?: Id<"workspaces">;
+  sharedWith?: Array<{ userId: string; permission: string }>;
   isArchived: boolean;
+  parentDocument?: Id<"documents">;
+  content?: string;
+  coverImage?: string;
+  icon?: string;
   isPublished: boolean;
-  parentDocument?: string; // If parentDocument is an Id, you might want to use a specific type.
 }

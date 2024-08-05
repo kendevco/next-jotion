@@ -1,18 +1,17 @@
+// app/(main)/(routes)/documents/[documentId]/page.tsx
+
 "use client";
 
 import { useMutation, useQuery } from "convex/react";
 import dynamic from "next/dynamic";
-import { useMemo, useEffect, useState } from "react";
-import Head from "next/head";
-import Image from "next/image";  // Import the Next.js Image component
-import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Toolbar } from "@/components/toolbar";
 import { Cover } from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useDocumentTitle } from "@/hooks/use-document-title"; // Import the custom hook
 
 interface DocumentIdPageProps {
   params: {
@@ -21,32 +20,26 @@ interface DocumentIdPageProps {
 }
 
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
-  const Editor = useMemo(() => dynamic(() => import("@/components/editor"), { ssr: false }), []);
-  const pathname = usePathname();
-  const [fullUrl, setFullUrl] = useState<string>("");
+  const Editor = useMemo(
+    () => dynamic(() => import("@/components/editor"), { ssr: false }),
+    []
+  );
 
   const document = useQuery(api.documents.getById, {
-    documentId: params.documentId
+    documentId: params.documentId,
   });
-
-  useDocumentTitle(document, "KenDev Jotion • ");
 
   const update = useMutation(api.documents.update);
 
   const onChange = (content: string) => {
     update({
       id: params.documentId,
-      content
+      content,
     });
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const protocol = window.location.protocol;
-      const host = window.location.host;
-      setFullUrl(`${protocol}//${host}${pathname}`);
-    }
-  }, [pathname]);
+  // Use the custom hook to set the document title and favicon
+  useDocumentTitle(document, "KenDev Jotion • ");
 
   if (document === undefined) {
     return (
@@ -68,53 +61,14 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     return <div>Not found</div>;
   }
 
-  const title = `KenDev Jotion • ${document.title}`;
-  const description = document.content ? document.content.substring(0, 200) : "No content available";
-  const defaultImage = "/documents.png";  // Ensure this default Jotion image exists in your public folder
-  const imageUrl = document.coverImage || defaultImage;
-  const faviconUrl = document.icon || "/favicon.ico";
-
   return (
-    <>
-      <Head>
-        <title>{title}</title>
-        <link rel="icon" href={faviconUrl} />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={fullUrl} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:image" content={imageUrl} />
-
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={fullUrl} />
-        <meta property="twitter:title" content={title} />
-        <meta property="twitter:description" content={description} />
-        <meta property="twitter:image" content={imageUrl} />
-      </Head>
-      <div className="pb-40">
-        {document.coverImage ? (
-          <Cover url={document.coverImage} />
-        ) : (
-          <div className="relative w-full h-[200px]">
-            <Image
-              src={defaultImage}
-              alt="Documents"
-              layout="fill"
-              objectFit="contain"
-              className="dark:hidden"
-              priority={true}
-            />
-          </div>
-        )}
-        <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-          <Toolbar initialData={document} />
-          <Editor onChange={onChange} initialContent={document.content} />
-        </div>
+    <div className="pb-40">
+      <Cover url={document.coverImage} />
+      <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
+        <Toolbar initialData={document} />
+        <Editor onChange={onChange} initialContent={document.content} />
       </div>
-    </>
+    </div>
   );
 };
 
