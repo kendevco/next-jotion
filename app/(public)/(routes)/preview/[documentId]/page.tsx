@@ -3,8 +3,10 @@
 
 import { useMutation, useQuery } from "convex/react";
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
+import Head from 'next/head';
 import Image from "next/image";
+import { usePathname } from 'next/navigation';
 
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -21,12 +23,14 @@ interface DocumentIdPageProps {
 
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   const Editor = useMemo(() => dynamic(() => import("@/components/editor"), { ssr: false }), []);
+  const pathname = usePathname();
+  const [fullUrl, setFullUrl] = useState<string>('');
 
   const document = useQuery(api.documents.getById, {
     documentId: params.documentId
   });
 
-  useDocumentTitle(document);
+  useDocumentTitle(document, "KenDev Shared Document - ");
 
   const update = useMutation(api.documents.update);
 
@@ -36,6 +40,14 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
       content
     });
   };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const protocol = window.location.protocol;
+      const host = window.location.host;
+      setFullUrl(`${protocol}//${host}${pathname}`);
+    }
+  }, [pathname]);
 
   if (document === undefined) {
     return (
@@ -57,29 +69,54 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     return <div>Not found</div>
   }
 
+  const title = `KenDev Shared Document - ${document.title}`;
+  const description = document.content ? document.content.substring(0, 200) : "No content available";
+  const imageUrl = document.coverImage || document.icon || "/default-og-image.png";
+  const faviconUrl = document.icon || "/favicon.ico";
+
   return (
-    <div className="pb-40">
-      {document.coverImage ? (
-        <Cover preview url={document.coverImage} />
-      ) : (
-        <div className="relative w-full h-[200px]">
-          <Image
-            src="/documents.png"
-            fill
-            className="object-contain dark:hidden"
-            alt="Documents"
+    <>
+      <Head>
+        <title>{title}</title>
+        <link rel="icon" href={faviconUrl} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={fullUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={imageUrl} />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={fullUrl} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={imageUrl} />
+      </Head>
+      <div className="pb-40">
+        {document.coverImage ? (
+          <Cover preview url={document.coverImage} />
+        ) : (
+          <div className="relative w-full h-[200px]">
+            <Image
+              src="/documents.png"
+              fill
+              className="object-contain dark:hidden"
+              alt="Documents"
+            />
+          </div>
+        )}
+        <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
+          <Toolbar preview initialData={document} />
+          <Editor
+            editable={false}
+            onChange={onChange}
+            initialContent={document.content}
           />
         </div>
-      )}
-      <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-        <Toolbar preview initialData={document} />
-        <Editor
-          editable={false}
-          onChange={onChange}
-          initialContent={document.content}
-        />
       </div>
-    </div>
+    </>
   );
 }
 
