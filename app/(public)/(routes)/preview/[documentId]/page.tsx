@@ -13,7 +13,6 @@ import { Toolbar } from "@/components/toolbar";
 import { Cover } from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDocumentTitle } from "@hooks/use-document-title";
-import { Document } from "@/types/types"; // Import the Document interface here
 
 interface DocumentIdPageProps {
   params: {
@@ -92,22 +91,22 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   return (
     <>
       <Head>
-        <title>{title}</title>
-        <link rel="icon" href={faviconUrl} />
+        <title key="title">{title}</title>
+        <link rel="icon" href={faviconUrl} key="favicon" />
 
         {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={fullUrl} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:image" content={imageUrl} />
+        <meta property="og:type" content="website" key="og-type" />
+        <meta property="og:url" content={fullUrl} key="og-url" />
+        <meta property="og:title" content={title} key="og-title" />
+        <meta property="og:description" content={description} key="og-description" />
+        <meta property="og:image" content={imageUrl} key="og-image" />
 
         {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={fullUrl} />
-        <meta property="twitter:title" content={title} />
-        <meta property="twitter:description" content={description} />
-        <meta property="twitter:image" content={imageUrl} />
+        <meta property="twitter:card" content="summary_large_image" key="twitter-card" />
+        <meta property="twitter:url" content={fullUrl} key="twitter-url" />
+        <meta property="twitter:title" content={title} key="twitter-title" />
+        <meta property="twitter:description" content={description} key="twitter-description" />
+        <meta property="twitter:image" content={imageUrl} key="twitter-image" />
       </Head>
       <div className="pb-40">
         {document.coverImage && ( // Only render the Cover component if there's a cover image
