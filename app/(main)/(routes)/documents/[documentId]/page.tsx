@@ -3,8 +3,9 @@
 import { useMutation, useQuery } from "convex/react";
 import dynamic from "next/dynamic";
 import { useMemo, useEffect, useState } from "react";
-import Head from 'next/head';
-import { usePathname } from 'next/navigation';
+import Head from "next/head";
+import Image from "next/image";  // Import the Next.js Image component
+import { usePathname } from "next/navigation";
 
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -22,13 +23,13 @@ interface DocumentIdPageProps {
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   const Editor = useMemo(() => dynamic(() => import("@/components/editor"), { ssr: false }), []);
   const pathname = usePathname();
-  const [fullUrl, setFullUrl] = useState<string>('');
+  const [fullUrl, setFullUrl] = useState<string>("");
 
   const document = useQuery(api.documents.getById, {
     documentId: params.documentId
   });
 
-  useDocumentTitle(document, "KenDev Jotion •");  // Updated prefix with the circle glyph
+  useDocumentTitle(document, "KenDev Jotion • ");
 
   const update = useMutation(api.documents.update);
 
@@ -40,7 +41,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const protocol = window.location.protocol;
       const host = window.location.host;
       setFullUrl(`${protocol}//${host}${pathname}`);
@@ -64,7 +65,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   }
 
   if (document === null) {
-    return <div>Not found</div>
+    return <div>Not found</div>;
   }
 
   const title = `KenDev Jotion • ${document.title}`;
@@ -94,17 +95,27 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
         <meta property="twitter:image" content={imageUrl} />
       </Head>
       <div className="pb-40">
-        <Cover url={document.coverImage} />
+        {document.coverImage ? (
+          <Cover url={document.coverImage} />
+        ) : (
+          <div className="relative w-full h-[200px]">
+            <Image
+              src={defaultImage}
+              alt="Documents"
+              layout="fill"
+              objectFit="contain"
+              className="dark:hidden"
+              priority={true}
+            />
+          </div>
+        )}
         <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
           <Toolbar initialData={document} />
-          <Editor
-            onChange={onChange}
-            initialContent={document.content}
-          />
+          <Editor onChange={onChange} initialContent={document.content} />
         </div>
       </div>
     </>
   );
-}
+};
 
 export default DocumentIdPage;

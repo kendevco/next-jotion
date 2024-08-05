@@ -4,9 +4,9 @@
 import { useMutation, useQuery } from "convex/react";
 import dynamic from "next/dynamic";
 import { useMemo, useEffect, useState } from "react";
-import Head from 'next/head';
+import Head from "next/head";
 import Image from "next/image";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -22,33 +22,43 @@ interface DocumentIdPageProps {
 }
 
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
-  const Editor = useMemo(() => dynamic(() => import("@/components/editor"), { ssr: false }), []);
+  // Dynamically load the Editor component
+  const Editor = useMemo(
+    () => dynamic(() => import("@/components/editor"), { ssr: false }),
+    []
+  );
   const pathname = usePathname();
-  const [fullUrl, setFullUrl] = useState<string>('');
+  const [fullUrl, setFullUrl] = useState<string>("");
 
+  // Fetch the document using Convex query
   const document = useQuery(api.documents.getById, {
-    documentId: params.documentId
+    documentId: params.documentId,
   });
 
+  // Set the document title using a custom hook
   useDocumentTitle(document, "KenDev Shared Document - ");
 
+  // Mutation hook to update the document
   const update = useMutation(api.documents.update);
 
+  // Handler for editor content changes
   const onChange = (content: string) => {
     update({
       id: params.documentId,
-      content
+      content,
     });
   };
 
+  // Use effect to set the full URL of the page
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const protocol = window.location.protocol;
       const host = window.location.host;
       setFullUrl(`${protocol}//${host}${pathname}`);
     }
   }, [pathname]);
 
+  // Render skeleton if the document is still loading
   if (document === undefined) {
     return (
       <div>
@@ -65,13 +75,18 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     );
   }
 
+  // Handle the case where the document is not found
   if (document === null) {
-    return <div>Not found</div>
+    return <div>Not found</div>;
   }
 
+  // Prepare metadata for the document
   const title = `KenDev Shared Document - ${document.title}`;
-  const description = document.content ? document.content.substring(0, 200) : "No content available";
-  const imageUrl = document.coverImage || document.icon || "/default-og-image.png";
+  const description = document.content
+    ? document.content.substring(0, 200)
+    : "No content available";
+  const defaultImage = "/default-og-image.png"; // Ensure this default image exists in your public folder
+  const imageUrl = document.coverImage || defaultImage;
   const faviconUrl = document.icon || "/favicon.ico";
 
   return (
@@ -100,24 +115,22 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
         ) : (
           <div className="relative w-full h-[200px]">
             <Image
-              src="/documents.png"
-              fill
+              src={defaultImage}
+              alt="Default Document Image"
+              layout="fill"
+              objectFit="contain"
               className="object-contain dark:hidden"
-              alt="Documents"
+              priority
             />
           </div>
         )}
         <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
           <Toolbar preview initialData={document} />
-          <Editor
-            editable={false}
-            onChange={onChange}
-            initialContent={document.content}
-          />
+          <Editor editable={false} onChange={onChange} initialContent={document.content} />
         </div>
       </div>
     </>
   );
-}
+};
 
 export default DocumentIdPage;
