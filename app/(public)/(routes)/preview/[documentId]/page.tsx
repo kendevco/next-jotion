@@ -20,7 +20,7 @@ export async function generateMetadata({
   params: { documentId: string };
 }): Promise<Metadata> {
   const documentId = params.documentId;
-  const document = await convex.query(api.documents.getById, { documentId: documentId as Id<"documents"> });
+  const document = await convex.query(api.documents.getPreviewById, { documentId: documentId as Id<"documents"> });
 
   if (!document) {
     return {

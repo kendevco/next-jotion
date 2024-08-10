@@ -1,6 +1,6 @@
-import { v } from 'convex/values';
-import { mutation, query } from './_generated/server';
-import { Id } from './_generated/dataModel';
+import { v } from "convex/values";
+import { mutation, query } from "./_generated/server";
+import { Id } from "./_generated/dataModel";
 
 export const upsertUserProfile = mutation({
   args: {
@@ -16,7 +16,8 @@ export const upsertUserProfile = mutation({
       .query("userProfile")
       .filter((q) => q.eq(q.field("userId"), args.clerkUserId))
       .take(1);
-    const existingProfile = existingProfiles.length > 0 ? existingProfiles[0] : null;
+    const existingProfile =
+      existingProfiles.length > 0 ? existingProfiles[0] : null;
     if (existingProfile) {
       const updatedProfile = { ...existingProfile, ...args.profileData };
       return await ctx.db.replace(existingProfile._id, updatedProfile);
@@ -35,13 +36,13 @@ export const getUserProfile = query({
   },
   async handler({ db }, { clerkUserId }) {
     const existingProfiles = await db
-      .query('userProfile')
-      .filter((q) => q.eq(q.field('userId'), clerkUserId))
+      .query("userProfile")
+      .filter((q) => q.eq(q.field("userId"), clerkUserId))
       .take(1);
     return existingProfiles.length > 0 ? existingProfiles[0] : null;
   },
 });
 
 export const getAllUserProfiles = query(async ({ db }) => {
-  return await db.query('userProfile').collect();
+  return await db.query("userProfile").collect();
 });

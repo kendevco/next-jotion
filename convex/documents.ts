@@ -233,6 +233,8 @@ export const getSearch = query({
 export const getById = query({
   args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
     const document = await ctx.db.get(args.documentId);
 
     if (!document) {
@@ -242,14 +244,6 @@ export const getById = query({
     if (document.isPublished && !document.isArchived) {
       return document;
     }
-
-    // TODO: Implement a more robust authentication system for static generation
-    // This is a temporary workaround to allow static generation of published documents
-    if (document.isPublished) {
-      return document;
-    }
-
-    const identity = await ctx.auth.getUserIdentity();
 
     if (!identity) {
       throw new Error("Not authenticated");
