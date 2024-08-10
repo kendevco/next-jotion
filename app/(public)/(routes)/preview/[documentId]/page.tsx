@@ -3,49 +3,60 @@ import { api } from "@/convex/_generated/api";
 import DocumentIdPage from './client'
 import { Id } from "@/convex/_generated/dataModel";
 import { ConvexHttpClient } from "convex/browser";
+import { headers } from 'next/headers'
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
+
+function getSiteUrl() {
+  const headersList = headers()
+  const host = headersList.get('host') || process.env.NEXT_PUBLIC_SITE_URL
+  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
+  return `${protocol}://${host}`
+}
 export async function generateMetadata({
   params,
 }: {
   params: { documentId: string };
 }): Promise<Metadata> {
-  try {
-    const document = await convex.query(api.documents.getPreviewById, { documentId: params.documentId as Id<"documents"> });
+  const documentId = params.documentId;
+  const document = await convex.query(api.documents.getById, { documentId: documentId as Id<"documents"> });
 
-    if (!document) {
-      return {
-        title: "Document Not Found",
-        description: "No description available.",
-      };
-    }
-
-    const title = `KenDev - ${document.title}`;
-    const defaultImage = "/document.png";
-    const imageUrl = document.coverImage || defaultImage;
-
+  if (!document) {
     return {
-      title,
-      openGraph: {
-        title,
-        images: [imageUrl],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title,
-        images: [imageUrl],
-      },
-    }
-
-  } catch (error) {
-    console.error("Error generating metadata:", error);
-    return {
-      title: "Error Loading Document",
-      description: "An error occurred while loading the document.",
+      title: "Document Not Found",
+      description: "No description available.",
     };
   }
+
+
+  const user = await convex.query(api.userprofile.getUserProfile, { clerkUserId: document.userId });
+  const userName = user ? user.displayName : "Someone";
+
+  const title = `${document.title ?? "Untitled"} - Shared Document`;
+  const description = `${userName} has shared "${document.title}" with you`;
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || getSiteUrl();
+  const defaultImage = `${siteUrl}/documents.png`;
+  const imageUrl = document.coverImage || defaultImage;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [imageUrl],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
 }
+
 
 
 export async function generateStaticParams() {
