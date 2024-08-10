@@ -27,7 +27,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     documentId: params.documentId,
   });
 
-  useDocumentTitle(document || undefined, "KenDev Shared Document - ");
+  useDocumentTitle(document || undefined, "KenDev - ");
 
   const update = useMutation(api.documents.update);
 

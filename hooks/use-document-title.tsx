@@ -11,7 +11,7 @@ interface DocumentData {
 
 export const useDocumentTitle = (
   documentData: DocumentData | undefined,
-  prefix: string = "KenDev Shared Document - "
+  prefix: string = "KenDev - "
 ) => {
   useEffect(() => {
     if (documentData) {

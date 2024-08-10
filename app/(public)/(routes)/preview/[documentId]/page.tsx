@@ -6,38 +6,53 @@ import { ConvexHttpClient } from "convex/browser";
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
-export async function generateMetadata({ params }: { params: { documentId: string } }): Promise<Metadata> {
-  const document = await convex.query(api.documents.getById, { documentId: params.documentId as Id<"documents"> });
+export async function generateMetadata({
+  params,
+}: {
+  params: { documentId: string };
+}): Promise<Metadata> {
+  try {
+    const document = await convex.query(api.documents.getPreviewById, { documentId: params.documentId as Id<"documents"> });
 
-
-  if (!document) {
-    return {
-      title: 'Document Not Found'
+    if (!document) {
+      return {
+        title: "Document Not Found",
+        description: "No description available.",
+      };
     }
-  }
 
-  const title = `KenDev Shared Document - ${document.title}`;
-  const description = document.content
-    ? document.content.substring(0, 200)
-    : "No content available";
-  const defaultImage = "/default-og-image.png";
-  const imageUrl = document.coverImage || defaultImage;
+    const title = `KenDev - ${document.title}`;
+    const defaultImage = "/document.png";
+    const imageUrl = document.coverImage || defaultImage;
 
-  return {
-    title,
-    description,
-    openGraph: {
+    return {
       title,
-      description,
-      images: [imageUrl],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: [imageUrl],
-    },
+      openGraph: {
+        title,
+        images: [imageUrl],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        images: [imageUrl],
+      },
+    }
+
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {
+      title: "Error Loading Document",
+      description: "An error occurred while loading the document.",
+    };
   }
+}
+
+
+export async function generateStaticParams() {
+  const documentIds = await convex.query(api.documents.getPublishedDocumentIds);
+  return documentIds.map((id) => ({
+    documentId: id,
+  }));
 }
 
 export default function Page({ params }: { params: { documentId: string } }) {

@@ -7,22 +7,25 @@ export default defineSchema({
     title: v.string(),
     userId: v.string(),
     workspaceId: v.optional(v.id("workspaces")),
-    sharedWith: v.optional(v.array(
-      v.object({
-        userId: v.string(),
-        permission: v.string(),
-      })
-    )),
+    sharedWith: v.optional(
+      v.array(
+        v.object({
+          userId: v.string(),
+          permission: v.string(),
+        })
+      )
+    ),
     isArchived: v.boolean(),
+    lastUpdated: v.optional(v.number()),
     parentDocument: v.optional(v.id("documents")),
     content: v.optional(v.string()),
     coverImage: v.optional(v.string()),
     icon: v.optional(v.string()),
     isPublished: v.boolean(),
   })
-  .index("by_user", ["userId"])
-  .index("by_parent", ["parentDocument"])
-  .index("by_user_parent", ["userId", "parentDocument"]),
+    .index("by_user", ["userId"])
+    .index("by_parent", ["parentDocument"])
+    .index("by_user_parent", ["userId", "parentDocument"]),
   workspaces: defineTable({
     name: v.string(),
     ownerId: v.optional(v.id("userProfile")),
@@ -54,5 +57,5 @@ export default defineSchema({
   publicFiles: defineTable({
     file: v.bytes(),
     filename: v.string(),
-  }).index('by_filename', ['filename']),
+  }).index("by_filename", ["filename"]),
 });
