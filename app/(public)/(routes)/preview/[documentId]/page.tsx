@@ -60,7 +60,29 @@ export async function generateMetadata({
 
 
 export async function generateStaticParams() {
-  const documentIds = await convex.query(api.documents.getPublishedDocumentIds);
+  const documentIds: Id<"documents">[] = [];
+  let cursor: string | undefined = undefined;
+  
+  // Define the type for the query result
+  interface PublishedDocumentsResult {
+    documentIds: Id<"documents">[];
+    nextCursor: string | null;
+    hasMore: boolean;
+  }
+  
+  // Fetch all published documents in batches
+  while (true) {
+    const result = await convex.query(api.documents.getPublishedDocumentIds, {
+      cursor,
+    }) as PublishedDocumentsResult;
+    
+    if (!result?.documentIds) break;
+    documentIds.push(...result.documentIds);
+    
+    if (!result.hasMore) break;
+    cursor = result.nextCursor ?? undefined;
+  }
+
   return documentIds.map((id) => ({
     documentId: id,
   }));

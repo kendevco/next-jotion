@@ -10,6 +10,7 @@ import { Toolbar } from "@/components/toolbar";
 import { Cover } from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDocumentTitle } from "@hooks/use-document-title";
+import { PublicDocumentList } from "@/app/(public)/_components/document-list";
 
 interface DocumentIdPageProps {
   params: {

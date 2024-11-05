@@ -234,25 +234,31 @@ export const getById = query({
   args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-
     const document = await ctx.db.get(args.documentId);
 
     if (!document) {
       throw new Error("Not found");
     }
 
-    if (document.isPublished && !document.isArchived) {
+    // If document is published, allow public access
+    if (document.isPublished) {
       return document;
     }
 
+    // If not published, require authentication
     if (!identity) {
       throw new Error("Not authenticated");
     }
 
-    const userId = identity.subject;
-
-    if (document.userId !== userId) {
-      throw new Error("Unauthorized");
+    // Check if user has access
+    if (document.userId !== identity.subject) {
+      const hasSharedAccess = document.sharedWith?.some(
+        share => share.userId === identity.subject
+      );
+      
+      if (!hasSharedAccess) {
+        throw new Error("Not authorized");
+      }
     }
 
     return document;
@@ -278,12 +284,45 @@ export const getPreviewById = query({
 
 // getPublishedDocumentIds
 export const getPublishedDocumentIds = query({
-  handler: async (ctx) => {
-    const documents = await ctx.db
+  args: {
+    cursor: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const query = await ctx.db
       .query("documents")
-      .filter((q) => q.eq(q.field("isPublished"), true))
-      .collect();
-    return documents.map((doc) => doc._id);
+      .withIndex("by_published", (q) => q.eq("isPublished", true))
+      .filter((q) => q.eq(q.field("isArchived"), false))
+      .order("desc")
+      .paginate({
+        cursor: args.cursor ?? null,
+        numItems: 10
+      });
+
+    // Only map the fields we need for validation
+    const documentsToCheck = query.page.map(doc => ({
+      _id: doc._id,
+      parentDocument: doc.parentDocument,
+    }));
+
+    // Filter based on parent status
+    const filteredIds = [];
+    for (const doc of documentsToCheck) {
+      let isParentValid = true;
+      if (doc.parentDocument) {
+        const parent = await ctx.db.get(doc.parentDocument);
+        // We still only use the fields we need, but we fetch the whole document
+        isParentValid = Boolean(parent?.isPublished && !parent?.isArchived);
+      }
+      if (isParentValid) {
+        filteredIds.push(doc._id);
+      }
+    }
+
+    return {
+      documentIds: filteredIds,
+      nextCursor: query.continueCursor,
+      hasMore: Boolean(query.continueCursor),
+    };
   },
 });
 
@@ -295,25 +334,32 @@ export const update = mutation({
     coverImage: v.optional(v.string()),
     icon: v.optional(v.string()),
     isPublished: v.optional(v.boolean()),
-    parentDocument: v.optional(v.id("documents")), // Ensure tableName is provided
+    parentDocument: v.optional(v.id("documents")),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
+
     if (!identity) {
-      throw new Error("Unauthorized");
+      throw new Error("Not authenticated");
     }
-    const userId = identity.subject;
+
     const { id, ...rest } = args;
-    const existingDocument = await ctx.db.get(args.id);
+
+    const existingDocument = await ctx.db.get(id);
+
     if (!existingDocument) {
-      throw new Error("Document not found");
+      throw new Error("Not found");
     }
-    if (existingDocument.userId !== userId) {
-      throw new Error("Permission denied");
+
+    if (existingDocument.userId !== identity.subject) {
+      throw new Error("Not authorized");
     }
-    const document = await ctx.db.patch(args.id, {
+
+    const document = await ctx.db.patch(id, {
       ...rest,
+      lastUpdated: Date.now(),
     });
+
     return document;
   },
 });
@@ -366,5 +412,41 @@ export const removeCoverImage = mutation({
     });
 
     return document;
+  },
+});
+
+// Add this query
+export const getPublishedSidebar = query({
+  args: {
+    parentDocument: v.optional(v.id("documents")),
+  },
+  handler: async (ctx, args) => {
+    const documents = await ctx.db
+      .query("documents")
+      .withIndex("by_parent", (q) =>
+        q.eq("parentDocument", args.parentDocument)
+      )
+      .filter((q) => 
+        q.and(
+          q.eq(q.field("isPublished"), true),
+          q.eq(q.field("isArchived"), false)
+        )
+      )
+      .collect();
+
+    // Only return documents whose parents are also published AND not archived
+    const filteredDocs = [];
+    for (const doc of documents) {
+      let isParentValid = true;
+      if (doc.parentDocument) {
+        const parent = await ctx.db.get(doc.parentDocument);
+        isParentValid = Boolean(parent?.isPublished && !parent?.isArchived);
+      }
+      if (isParentValid) {
+        filteredDocs.push(doc);
+      }
+    }
+
+    return filteredDocs;
   },
 });

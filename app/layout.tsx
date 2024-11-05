@@ -14,6 +14,7 @@ const font = DM_Sans({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Jotion',
   description: 'The connected workspace where better, faster work happens.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   icons: {
     icon: [
       {

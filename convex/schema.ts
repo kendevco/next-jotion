@@ -25,7 +25,8 @@ export default defineSchema({
   })
     .index("by_user", ["userId"])
     .index("by_parent", ["parentDocument"])
-    .index("by_user_parent", ["userId", "parentDocument"]),
+    .index("by_user_parent", ["userId", "parentDocument"])
+    .index("by_published", ["isPublished"]),
   workspaces: defineTable({
     name: v.string(),
     ownerId: v.optional(v.id("userProfile")),

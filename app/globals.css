@@ -80,3 +80,12 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+/* Add these styles to your globals.css */
+[data-rbd-drag-handle-draggable-id] {
+  cursor: grab;
+}
+
+[data-rbd-drag-handle-draggable-id]:active {
+  cursor: grabbing;
+}

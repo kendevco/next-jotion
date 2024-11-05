@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { UserProfile, Workspace } from "@/types/types"; // Ensure correct import
 import { Id } from "@/convex/_generated/dataModel"; // Ensure Id type is imported from the correct module
 import axios from "axios";
-import { DocumentList } from "@/components/document-list"; // Import DocumentList component
+import { DocumentList } from "@/app/(main)/_components/document-list"; // Import DocumentList component
 
 interface PermissionsModalProps {
   isOpen: boolean;
